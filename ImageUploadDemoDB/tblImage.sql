@@ -9,4 +9,8 @@
 
 GO
 
-CREATE UNIQUE NONCLUSTERED INDEX [IX_tblImage_ImageName_ImageURL] ON [dbo].[tblImage] (ImageName, ImageURL)
+CREATE UNIQUE INDEX [IX_tblImage_ImageURL] ON [dbo].[tblImage] (ImageURL)
+
+GO
+
+CREATE UNIQUE INDEX [IX_tblImage_ImageName] ON [dbo].[tblImage] (ImageName)
