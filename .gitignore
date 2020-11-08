@@ -3,3 +3,7 @@
 ################################################################################
 
 /ImageUploadDemo/bin/Debug/netcoreapp3.1
+/ImageUploadDemo/obj
+/ImageUploadDemoDB/obj/Debug
+/ImageUploadDemoDB/ImageUploadDemoDB.dbmdl
+/ImageUploadDemoDB/ImageUploadDemoDB.jfm

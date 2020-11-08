@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="21eafb6d-fa2e-43b8-ac26-672bac2ddeb8" ChangeDateTime="11/08/2020 22:35:36">
+    <Property Name="ElementName" Value="[dbo].[tblTag].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[tblTag]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TagId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ee0e9c97-bafa-4120-b380-82bcc6727207" ChangeDateTime="11/08/2020 22:35:45">
+    <Property Name="ElementName" Value="[dbo].[tblImage].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[tblImage]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ImageId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="55fd554c-3b9c-41d4-91da-ddc07631b84a" ChangeDateTime="11/08/2020 22:36:05">
+    <Property Name="ElementName" Value="[dbo].[tblImageTag].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[tblImageTag]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ImageTagId" />
+  </Operation>
+</Operations>
