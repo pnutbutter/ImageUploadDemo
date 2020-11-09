@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageUploadDemo", "ImageUpl
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ImageUploadDemoDB", "ImageUploadDemoDB\ImageUploadDemoDB.sqlproj", "{747D5099-3986-4426-8BAD-AD2C7F46F6D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{0B2A9D4F-E9C4-450F-BE88-F392610729D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{84D926EF-11CA-4EB3-A61E-12A75C5E78A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +25,10 @@ Global
 		{747D5099-3986-4426-8BAD-AD2C7F46F6D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{747D5099-3986-4426-8BAD-AD2C7F46F6D9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{747D5099-3986-4426-8BAD-AD2C7F46F6D9}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{0B2A9D4F-E9C4-450F-BE88-F392610729D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0B2A9D4F-E9C4-450F-BE88-F392610729D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0B2A9D4F-E9C4-450F-BE88-F392610729D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0B2A9D4F-E9C4-450F-BE88-F392610729D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84D926EF-11CA-4EB3-A61E-12A75C5E78A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84D926EF-11CA-4EB3-A61E-12A75C5E78A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84D926EF-11CA-4EB3-A61E-12A75C5E78A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84D926EF-11CA-4EB3-A61E-12A75C5E78A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
