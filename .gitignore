@@ -12,3 +12,5 @@
 /ImageUploadDemoDB/bin/Debug
 /BusinessLogic/obj
 /BusinessLogic/bin/Debug/netcoreapp3.1
+/ImageUploadTests/bin/Debug/netcoreapp3.1
+/ImageUploadTests/obj
