@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -23,8 +24,7 @@ namespace ImageUploadDemo
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\\ProjectsV13;Database=ImageUploadDemoDB;Integrated Security=True;");
+                optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["ImageUploadConnection"].ConnectionString);
             }
         }
 
