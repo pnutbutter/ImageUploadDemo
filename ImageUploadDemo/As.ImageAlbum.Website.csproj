@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
+    <ProjectReference Include="..\BusinessLogic\AS.ImageAlbum.BusinessLogic.csproj" />
   </ItemGroup>
 
 </Project>
