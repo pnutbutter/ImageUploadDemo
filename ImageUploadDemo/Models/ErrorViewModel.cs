@@ -1,6 +1,6 @@
 using System;
 
-namespace ImageUploadDemo.Models
+namespace AS.ImageAlbum.Website.Models
 {
     public class ErrorViewModel
     {

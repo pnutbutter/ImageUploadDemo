@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ImageUploadDemo
+namespace AS.ImageAlbum.Website
 {
     public partial class TblImage
     {

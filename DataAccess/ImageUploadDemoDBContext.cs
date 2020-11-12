@@ -3,15 +3,15 @@ using System.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace ImageUploadDemo
+namespace AS.ImageAlbum.Website
 {
-    public partial class ImageUploadDemoDBContext : DbContext
+    public partial class WebsiteDBContext : DbContext
     {
-        public ImageUploadDemoDBContext()
+        public WebsiteDBContext()
         {
         }
 
-        public ImageUploadDemoDBContext(DbContextOptions<ImageUploadDemoDBContext> options)
+        public WebsiteDBContext(DbContextOptions<WebsiteDBContext> options)
             : base(options)
         {
         }

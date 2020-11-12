@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ImageUploadDemo.Models;
+using AS.ImageAlbum.Website.Models;
 
-namespace ImageUploadDemo.Controllers
+namespace AS.ImageAlbum.Website.Controllers
 {
     public class HomeController : Controller
     {

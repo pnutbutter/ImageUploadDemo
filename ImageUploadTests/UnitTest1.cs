@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework.Internal;
 
-namespace ImageUploadTests
+namespace AS.ImageAlbum.BusinessLogic.Tests
 {
     [TestClass]
     public class UnitTest1
