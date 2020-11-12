@@ -3,7 +3,7 @@ using System.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace AS.ImageAlbum.Website
+namespace AS.ImageAlbum.DataAccess
 {
     public partial class WebsiteDBContext : DbContext
     {

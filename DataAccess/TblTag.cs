@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AS.ImageAlbum.Website
+namespace AS.ImageAlbum.DataAccess
 {
     public partial class TblTag
     {
