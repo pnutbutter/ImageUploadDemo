@@ -5,13 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAccess\AS.ImageAlbum.DataAccess.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="DTO\Command\" />
     <Folder Include="DTO\Query\" />
     <Folder Include="Interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AS.ImageAlbum.Repository\AS.ImageAlbum.Repository.csproj" />
   </ItemGroup>
 
 </Project>
