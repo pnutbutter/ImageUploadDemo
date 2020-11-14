@@ -5,8 +5,8 @@ using System;
 
 namespace AS.ImageAlbum.Repository
 {
-    public class ImageRepository : IRepository<Image>
-    {
+    public class ImageRepository : IImageRepository
+    { 
         WebsiteDBContext dbContext;
         public ImageRepository()
         {

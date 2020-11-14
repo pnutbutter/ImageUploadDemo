@@ -14,9 +14,9 @@ namespace AS.ImageAlbum.BusinessLogic
 
     public class ImageService : IImageService
     {
-        protected IRepository<Image> repository;
+        protected IImageRepository repository;
 
-        public ImageService(IRepository<Image> repository)
+        public ImageService(IImageRepository repository)
         {
             this.repository = repository;
         }

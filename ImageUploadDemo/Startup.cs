@@ -12,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AS.ImageAlbum.BusinessLogic.Interfaces;
 using Autofac.Extensions.DependencyInjection;
+using AS.ImageAlbum.Repository;
+using AS.ImageAlbum.Repository.Interfaces;
 
 namespace ImageUploadDemo
 {
@@ -31,6 +33,7 @@ namespace ImageUploadDemo
 
             var builder = new ContainerBuilder();
             builder.RegisterType<ImageService>().As<IImageService>();
+            builder.RegisterType<ImageRepository>().As<IImageRepository>();
             builder.Populate(services);
 
 
