@@ -2,12 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AS.ImageAlbum.BusinessLogic;
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using AS.ImageAlbum.BusinessLogic.Interfaces;
+using Autofac.Extensions.DependencyInjection;
 
 namespace ImageUploadDemo
 {
@@ -21,9 +25,17 @@ namespace ImageUploadDemo
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            var builder = new ContainerBuilder();
+            builder.RegisterType<ImageService>().As<IImageService>();
+            builder.Populate(services);
+
+
+            var container = builder.Build();
+            return new AutofacServiceProvider(container);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
