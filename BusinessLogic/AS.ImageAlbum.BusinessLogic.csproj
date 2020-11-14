@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTO\Command\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\AS.ImageAlbum.Repository\AS.ImageAlbum.Repository.csproj" />
   </ItemGroup>
 
