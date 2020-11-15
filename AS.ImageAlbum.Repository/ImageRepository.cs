@@ -2,6 +2,7 @@
 using AS.ImageAlbum.Repository.Interfaces;
 using AS.ImageAlbum.Repository.Models;
 using System;
+using System.Collections.Generic;
 
 namespace AS.ImageAlbum.Repository
 {
@@ -22,13 +23,6 @@ namespace AS.ImageAlbum.Repository
             repoImage.ImageName = image.ImageName;
             repoImage.ImageUrl = image.ImageUrl;
 
-            if (image.TblImageTag != null && image.TblImageTag.Count > 0)
-            {
-                foreach (TblImageTag tag in image.TblImageTag)
-                {
-                    repoImage.ImageTags.Add(new ImageTag { ImageId = tag.ImageId, ImageTagId = tag.ImageTagId });
-                }
-            }
             return repoImage;
         }
 
@@ -75,6 +69,16 @@ namespace AS.ImageAlbum.Repository
             TblImage tblImage = GetDBModelByID(entityToUpdate.ImageId);
             MapToDBModel(entityToUpdate, tblImage);
             dbContext.TblImage.Update(tblImage);
+        }
+
+        public List<Image> GetAll()
+        {
+            List<Image> imageList = new List<Image>();
+            foreach(TblImage tblImage in dbContext.TblImage)
+            {
+                imageList.Add(MapToRepoModel(tblImage));
+            }
+            return imageList;
         }
     }
 }

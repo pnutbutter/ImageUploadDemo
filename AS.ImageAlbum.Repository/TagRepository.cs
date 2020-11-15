@@ -64,5 +64,14 @@ namespace AS.ImageAlbum.Repository
             MapToDBModel(entityToUpdate, tblImage);
             dbContext.TblTag.Update(tblImage);
         }
+        public List<Tag> GetAll()
+        {
+            List<Tag> imageList = new List<Tag>();
+            foreach (TblTag tblImage in dbContext.TblTag)
+            {
+                imageList.Add(MapToRepoModel(tblImage));
+            }
+            return imageList;
+        }
     }
 }

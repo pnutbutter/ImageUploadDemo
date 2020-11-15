@@ -11,5 +11,6 @@ namespace AS.ImageAlbum.Repository.Interfaces
         TEntity GetByID(object id);
         void Insert(TEntity entity);
         void Update(TEntity entityToUpdate);
+        List<TEntity> GetAll();
     }
 }
