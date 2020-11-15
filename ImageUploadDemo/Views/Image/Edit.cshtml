@@ -8,7 +8,7 @@
 <style>
     .image-box {
         width: 100%;
-        height:100%;
+        height: 100%;
     }
 </style>
 
@@ -29,8 +29,15 @@
         <form enctype="multipart/form-data" method="post" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <span id="tag-wrapper">
-
-            </span><input id="tag-input" type="text" /><button id="add-tag">Add Tag</button>
+                @for (int i = 0; i < this.Model.TagIDs.Length; i++)
+                {
+                    <span class="tag-parent">
+                        <button type="button" class="btn btn-primary tag-button">@this.Model.TagNames[i] <span class="badge badge-danger">X</span></button>
+                        <input type="hidden" name="TagNames" value="@this.Model.TagNames[i]" /><input type="hidden" name="TagIDs" value="@this.Model.TagIDs[i]">
+                    </span>
+                }
+            </span>
+            <input id="tag-input" type="text" /><button id="add-tag">Add Tag</button>
             <input asp-for="ImageId" type="hidden" />
             <div class="form-group">
                 <img src="@Model.ImageDisplay" alt="@Model.ImageAlt" class="image-box" />
@@ -80,8 +87,7 @@
         });
 
         AddTag = function () {
-            
-            $('#tag-wrapper').append(('<span>' + $("#tag-input").val() + '<input type="hidden" name="TagNames" value="' + $("#tag-input").val() + '"><input type="hidden" name="TagIDs" value="00000000-0000-0000-0000-000000000000"></span>'));
+            $('#tag-wrapper').append('<span class="tag-parent"><button type="button" class="btn btn-primary tag-button">' + $("#tag-input").val() + '<span class="badge badge-danger">X</span></button><input type="hidden" name="TagNames" value="' + $("#tag-input").val() + '" /><input type="hidden" name="TagIDs" value="00000000-0000-0000-0000-000000000000"></span>');
             $("#tag-input").val("");
         }
 
@@ -98,6 +104,11 @@
                 AddTag();
                 return false;
             }
+        });
+        $(".tag-button").on("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).parent().remove();
         });
     </script>
 }

@@ -96,17 +96,21 @@ namespace AS.ImageAlbum.Website.Controllers
             model.Message = message;
             try
             {
-                FindAllServicesQuery query = new FindAllServicesQuery();
-                this.service.FindAll(query);
-                if (query.Response == FindAllServicesQuery.SUCCESS)
+                FindByIDQuery query = new FindByIDQuery();
+                query.ImageId = id;
+                this.service.FindByID(query);
+                if (query.Response == FindByIDQuery.SUCCESS)
                 {
+                    model.ImageDisplay = String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(query.Record.Image));
+                    model.ImageAlt = query.Record.ImageAlt;
+                    model.ImageName = query.Record.ImageName;
+                    model.ImageUrl = query.Record.ImageUrl;
 
-                    AlbumImage image = query.AlbumImages.Find(x => x.ImageId == id);
+                    query.Record.ImageTags.Sort((t1, t2) => string.Compare(t1.Name, t2.Name));
 
-                    model.ImageDisplay = String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(image.Image));
-                    model.ImageAlt = image.ImageAlt;
-                    model.ImageName = image.ImageName;
-                    model.ImageUrl = image.ImageUrl;
+                    model.TagIDs = query.Record.ImageTags.Select(t => t.ImageTagId).ToArray();
+                    model.TagNames = query.Record.ImageTags.Select(t => t.Name).ToArray();
+
                 }
                 else
                 {

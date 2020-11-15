@@ -8,7 +8,7 @@ namespace AS.ImageAlbum.Repository.Interfaces
     {
         void Delete(TEntity entityToDelete);
         void Delete(object id);
-        TEntity GetByID(object id);
+        TEntity GetByID(Guid id);
         Guid Insert(TEntity entity);
         void Update(TEntity entityToUpdate);
         List<TEntity> GetAll();

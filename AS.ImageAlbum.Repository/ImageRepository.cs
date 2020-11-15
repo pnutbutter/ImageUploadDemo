@@ -62,11 +62,37 @@ namespace AS.ImageAlbum.Repository
             }
         }
 
-        public virtual Image GetByID(object id)
+        public virtual Image GetByID(Guid id)
         {
             try
             {
-                return MapToRepoModel(GetDBModelByID(id));
+                //populate image fields
+                Image img = (from it in dbContext.TblImage
+                                                       where id == it.ImageId
+                                                       select new Image()
+                                                       {
+                                                           ImageId = it.ImageId,
+                                                           AlbumImage = it.AlbumImage,
+                                                           ImageAlt = it.ImageAlt,
+                                                           ImageName = it.ImageName,
+                                                           ImageUrl = it.ImageUrl
+                                                       }).SingleOrDefault();
+                if (img == null || img.ImageId != id)
+                    throw new ArgumentException("Image not found");
+
+                //Populate image tags
+                img.ImageTags = (from it in dbContext.TblImageTag
+                                                   join t in dbContext.TblTag on it.TagId equals t.TagId
+                                                   where id == it.ImageId
+                                                   select new ImageTag()
+                                                   {
+                                                       ImageId = it.ImageId,
+                                                       ImageTagId = it.ImageTagId,
+                                                       TagId = it.TagId,
+                                                       Name = t.Tag
+                                                   }).ToList();
+
+                return img;
             }
             catch (Exception ex)
             {
@@ -154,15 +180,26 @@ namespace AS.ImageAlbum.Repository
                                                    Name = t.Tag
                                                }).ToList();
 
+            //remove tags no longer there
+            List<ImageTag> deletedTags = currentImageTags.FindAll(ct => !existingTagsFromList.Select(et => et.Tag).ToArray().Contains(ct.Name));
+            foreach(ImageTag tag in deletedTags)
+            {
+                //remove from list of tags to insert in next loop
+                imageTags.Remove(tag);
+                //remove ImagetTag record connecting image to tag
+                TblImageTag imgTag = new TblImageTag() { ImageTagId=tag.ImageTagId };
+                dbContext.TblImageTag.Attach(imgTag);
+                dbContext.TblImageTag.Remove(imgTag);
+            }
+
             foreach (ImageTag tag in imageTags)
             {
                 //if tag already is related to image skip
-                if (currentImageTags.Find(ct => ct.Name == tag.Name) != null && string.IsNullOrWhiteSpace(currentImageTags.Find(ct => ct.Name == tag.Name).Name))
+                if (currentImageTags.Find(ct => ct.Name == tag.Name) != null && !string.IsNullOrWhiteSpace(currentImageTags.Find(ct => ct.Name == tag.Name).Name))
                     continue;
 
-                
                 //Tag exists but imagetag does not exist - just create image tag record
-                if (existingTagsFromList.Find(et => et.Tag==tag.Name)!=null && string.IsNullOrWhiteSpace(existingTagsFromList.Find(et => et.Tag == tag.Name).Tag))
+                if (existingTagsFromList.Find(et => et.Tag==tag.Name)!=null && !string.IsNullOrWhiteSpace(existingTagsFromList.Find(et => et.Tag == tag.Name).Tag))
                 {
                     //create image tag record
                     dbContext.TblImageTag.Add(new TblImageTag { ImageId = imageID, TagId = existingTagsFromList.Find(et => et.Tag == tag.Name).TagId, ImageTagId = Guid.NewGuid() });

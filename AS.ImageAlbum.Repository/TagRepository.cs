@@ -41,7 +41,7 @@ namespace AS.ImageAlbum.Repository
             Delete(entity);
         }
 
-        public Tag GetByID(object id)
+        public Tag GetByID(Guid id)
         {
             return MapToRepoModel(GetDBModelByID(id));
         }

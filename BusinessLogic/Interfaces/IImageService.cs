@@ -12,5 +12,7 @@ namespace AS.ImageAlbum.BusinessLogic.Interfaces
         void Create(CreateImageCommand command);
 
         void Update(EditImageCommand command);
+
+        void FindByID(FindByIDQuery query);
     }
 }

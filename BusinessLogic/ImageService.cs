@@ -30,6 +30,16 @@ namespace AS.ImageAlbum.BusinessLogic
             aImage.ImageId = img.ImageId;
             aImage.ImageName = img.ImageName;
             aImage.ImageUrl = img.ImageUrl;
+
+            if (img.ImageTags != null && img.ImageTags.Count > 0)
+            {
+                aImage.ImageTags = new List<AlbumImageTag>();
+                foreach (ImageTag tag in img.ImageTags)
+                {
+                    aImage.ImageTags.Add(new AlbumImageTag { ImageId = img.ImageId, ImageTagId = tag.ImageTagId, TagId = tag.TagId, Name = tag.Name });
+                }
+            }
+
             return aImage;
         }
 
@@ -98,6 +108,21 @@ namespace AS.ImageAlbum.BusinessLogic
                 return;
             }
             command.Response = EditImageCommand.SUCCESS;
+        }
+
+        public void FindByID(FindByIDQuery query)
+        {
+            query.Record = new AlbumImage();
+            try
+            {
+                query.Record = Convert(repository.GetByID(query.ImageId));
+            }
+            catch (Exception ex)
+            {
+                query.Response = String.Format(FindAllServicesQuery.ERROR, ex.Message);
+                return;
+            }
+            query.Response = FindAllServicesQuery.SUCCESS;
         }
     }
 }
