@@ -39,12 +39,11 @@ namespace AS.ImageAlbum.BusinessLogic.Tests
             Mock<ImageRepository> mockImageRepository = new Mock<ImageRepository>();
             CreateImageCommand command = new CreateImageCommand();
             command.image = new Models.AlbumImage();
-            command.image.Image = new byte[Convert.ToByte(1)];
             command.image.ImageAlt = "1";
             command.image.ImageName = "1";
             command.image.ImageUrl = "1";
             Image mockImage = createMockImage(1);
-            mockImageRepository.Setup(x => x.Insert(mockImage)).Returns(mockImage.ImageId);
+            mockImageRepository.Setup(x => x.Insert(It.IsAny<Image>())).Returns(mockImage.ImageId);
 
             ImageService imageService = new ImageService(mockImageRepository.Object);
             imageService.Create(command);

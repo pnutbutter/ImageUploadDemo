@@ -35,19 +35,19 @@ namespace AS.ImageAlbum.Repository
             image.ImageUrl = repoImage.ImageUrl;
         }
 
-        public void Delete(Image entityToDelete)
+        public virtual void Delete(Image entityToDelete)
         {
             TblImage tblImage = GetDBModelByID(entityToDelete.ImageId);
             dbContext.TblImage.Remove(tblImage);
         }
 
-        public void Delete(object id)
+        public virtual void Delete(object id)
         {
             TblImage entity = dbContext.TblImage.Find(id);
             Delete(entity);
         }
 
-        public Image GetByID(object id)
+        public virtual Image GetByID(object id)
         {
             return MapToRepoModel(GetDBModelByID(id));
         }
@@ -57,7 +57,7 @@ namespace AS.ImageAlbum.Repository
             return dbContext.TblImage.Find(id);
         }
 
-        public Guid Insert(Image entity)
+        public virtual Guid Insert(Image entity)
         {
             TblImage tblImage = new TblImage();
             MapToDBModel(entity, tblImage);
@@ -65,7 +65,7 @@ namespace AS.ImageAlbum.Repository
             return tblImage.ImageId;
         }
 
-        public void Update(Image entityToUpdate)
+        public virtual void Update(Image entityToUpdate)
         {
             TblImage tblImage = GetDBModelByID(entityToUpdate.ImageId);
             MapToDBModel(entityToUpdate, tblImage);

@@ -33,9 +33,29 @@ namespace AS.ImageAlbum.BusinessLogic
             return aImage;
         }
 
+        private Image Convert(AlbumImage img)
+        {
+            Image aImage = new Image();
+            aImage.AlbumImage = img.Image;
+            aImage.ImageAlt = img.ImageAlt;
+            aImage.ImageId = img.ImageId;
+            aImage.ImageName = img.ImageName;
+            aImage.ImageUrl = img.ImageUrl;
+            return aImage;
+        }
+
         public void Create(CreateImageCommand command)
         {
-            throw new NotImplementedException();
+            try
+            {
+                command.image.ImageId=repository.Insert(Convert(command.image));
+            }
+            catch (Exception ex)
+            {
+                command.Response = String.Format(FindAllServicesQuery.ERROR, ex.Message);
+                return;
+            }
+            command.Response = FindAllServicesQuery.SUCCESS;
         }
 
         public void FindAll(FindAllServicesQuery query)
