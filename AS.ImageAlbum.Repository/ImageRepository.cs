@@ -61,7 +61,9 @@ namespace AS.ImageAlbum.Repository
         {
             TblImage tblImage = new TblImage();
             MapToDBModel(entity, tblImage);
+            tblImage.ImageId = Guid.NewGuid();
             dbContext.TblImage.Add(tblImage);
+            this.dbContext.SaveChanges();
             return tblImage.ImageId;
         }
 

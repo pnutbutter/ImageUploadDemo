@@ -24,7 +24,8 @@ namespace AS.ImageAlbum.DataAccess
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["ImageUploadConnection"].ConnectionString);
+                //optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["ImageUploadConnection"].ConnectionString);
+                optionsBuilder.UseSqlServer("Data Source=(localdb)\\ProjectsV13;Database=ImageUploadDemoDB;Integrated Security=True;");
             }
         }
 
