@@ -16,3 +16,7 @@
 /ImageUploadTests/obj
 /AS.ImageAlbum.Repository/bin/Debug/netcoreapp3.1
 /AS.ImageAlbum.Repository/obj
+/.vs/AS.ImageAlbum/v16/TestStore
+/.vs/AS.ImageAlbum/DesignTimeBuild
+/ImageUploadDemoDB/AS.ImageAlbum.DemoDB.dbmdl
+/ImageUploadDemoDB/AS.ImageAlbum.DemoDB.jfm

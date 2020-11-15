@@ -19,13 +19,13 @@ namespace AS.ImageAlbum.BusinessLogic.Tests
         public void FindAllImages_ReturnsSuccessAndItems()
         {
             Mock<ImageRepository> mockImageRepository = new Mock<ImageRepository>();
+            FindAllServicesQuery query = new FindAllServicesQuery();
             List<Image> imageList = new List<Image>();
             for(int i = 0; i<5; i++)
             {
                 imageList.Add(createMockImage(i));
             }
             mockImageRepository.Setup(x => x.GetAll()).Returns(imageList);
-            FindAllServicesQuery query = new FindAllServicesQuery();
             ImageService imageService = new ImageService(mockImageRepository.Object);
             imageService.FindAll(query);
             Assert.That(query.Response, Is.EqualTo(FindAllServicesQuery.SUCCESS));

@@ -71,7 +71,7 @@ namespace AS.ImageAlbum.Repository
             dbContext.TblImage.Update(tblImage);
         }
 
-        public List<Image> GetAll()
+        public virtual List<Image> GetAll()
         {
             List<Image> imageList = new List<Image>();
             foreach(TblImage tblImage in dbContext.TblImage)
