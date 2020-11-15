@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace AS.ImageAlbum.Repository
 {
     public class ImageRepository : IImageRepository
-    { 
+    {
         WebsiteDBContext dbContext;
         public ImageRepository()
         {
@@ -37,59 +37,108 @@ namespace AS.ImageAlbum.Repository
 
         public virtual void Delete(Image entityToDelete)
         {
-            TblImage tblImage = GetDBModelByID(entityToDelete.ImageId);
-            dbContext.TblImage.Remove(tblImage);
+            try
+            {
+                TblImage tblImage = GetDBModelByID(entityToDelete.ImageId);
+                dbContext.TblImage.Remove(tblImage);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public virtual void Delete(object id)
         {
-            TblImage entity = dbContext.TblImage.Find(id);
-            Delete(entity);
+            try
+            {
+                TblImage entity = dbContext.TblImage.Find(id);
+                Delete(entity);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public virtual Image GetByID(object id)
         {
-            return MapToRepoModel(GetDBModelByID(id));
+            try
+            {
+                return MapToRepoModel(GetDBModelByID(id));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         private TblImage GetDBModelByID(object id)
         {
-            return dbContext.TblImage.Find(id);
+            try
+            {
+                return dbContext.TblImage.Find(id);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public virtual Guid Insert(Image entity)
         {
-            TblImage tblImage = new TblImage();
-            MapToDBModel(entity, tblImage);
-            tblImage.ImageId = Guid.NewGuid();
-            dbContext.TblImage.Add(tblImage);
-            this.dbContext.SaveChanges();
-            return tblImage.ImageId;
+            try
+            {
+                TblImage tblImage = new TblImage();
+                MapToDBModel(entity, tblImage);
+                tblImage.ImageId = Guid.NewGuid();
+                dbContext.TblImage.Add(tblImage);
+                this.dbContext.SaveChanges();
+                return tblImage.ImageId;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public virtual void Update(Image entityToUpdate)
         {
-            TblImage tblImage = GetDBModelByID(entityToUpdate.ImageId);
-            if(tblImage.ImageAlt != entityToUpdate.ImageAlt)
-                tblImage.ImageAlt = entityToUpdate.ImageAlt;
-            if(tblImage.ImageName != entityToUpdate.ImageName)
-                tblImage.ImageName = entityToUpdate.ImageName;
-            if (tblImage.ImageUrl != entityToUpdate.ImageUrl)
-                tblImage.ImageUrl = entityToUpdate.ImageUrl;
-            if (entityToUpdate.AlbumImage != null && entityToUpdate.AlbumImage.Length > 0)
-                tblImage.AlbumImage = entityToUpdate.AlbumImage;
-            dbContext.TblImage.Update(tblImage);
-            this.dbContext.SaveChanges();
+            try
+            {
+                TblImage tblImage = GetDBModelByID(entityToUpdate.ImageId);
+                if (tblImage.ImageAlt != entityToUpdate.ImageAlt)
+                    tblImage.ImageAlt = entityToUpdate.ImageAlt;
+                if (tblImage.ImageName != entityToUpdate.ImageName)
+                    tblImage.ImageName = entityToUpdate.ImageName;
+                if (tblImage.ImageUrl != entityToUpdate.ImageUrl)
+                    tblImage.ImageUrl = entityToUpdate.ImageUrl;
+                if (entityToUpdate.AlbumImage != null && entityToUpdate.AlbumImage.Length > 0)
+                    tblImage.AlbumImage = entityToUpdate.AlbumImage;
+                dbContext.TblImage.Update(tblImage);
+                this.dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public virtual List<Image> GetAll()
         {
-            List<Image> imageList = new List<Image>();
-            foreach(TblImage tblImage in dbContext.TblImage)
+            try
             {
-                imageList.Add(MapToRepoModel(tblImage));
+                List<Image> imageList = new List<Image>();
+                foreach (TblImage tblImage in dbContext.TblImage)
+                {
+                    imageList.Add(MapToRepoModel(tblImage));
+                }
+                return imageList;
             }
-            return imageList;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
