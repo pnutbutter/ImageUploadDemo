@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace AS.ImageAlbum.Website.Models.ImageData
     public class ImageCreate
     {
         [Required]
-        public byte[] Image { get; set; }
+        public IFormFile ImageFile { get; set; }
         [Required]
         [StringLength(50, ErrorMessage = "Maximum 50 characters")]
         public string ImageName { get; set; }

@@ -8,6 +8,7 @@ namespace AS.ImageAlbum.Website.Models.ImageData
 {
     public class ImageIndex
     {
+        public string Message { get; set; }
         public List<AlbumImage> AlbumImages { get; set; }
     }
 }

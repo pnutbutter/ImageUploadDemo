@@ -70,8 +70,16 @@ namespace AS.ImageAlbum.Repository
         public virtual void Update(Image entityToUpdate)
         {
             TblImage tblImage = GetDBModelByID(entityToUpdate.ImageId);
-            MapToDBModel(entityToUpdate, tblImage);
+            if(tblImage.ImageAlt != entityToUpdate.ImageAlt)
+                tblImage.ImageAlt = entityToUpdate.ImageAlt;
+            if(tblImage.ImageName != entityToUpdate.ImageName)
+                tblImage.ImageName = entityToUpdate.ImageName;
+            if (tblImage.ImageUrl != entityToUpdate.ImageUrl)
+                tblImage.ImageUrl = entityToUpdate.ImageUrl;
+            if (entityToUpdate.AlbumImage != null && entityToUpdate.AlbumImage.Length > 0)
+                tblImage.AlbumImage = entityToUpdate.AlbumImage;
             dbContext.TblImage.Update(tblImage);
+            this.dbContext.SaveChanges();
         }
 
         public virtual List<Image> GetAll()

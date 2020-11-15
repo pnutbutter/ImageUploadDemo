@@ -10,6 +10,14 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+@if (!string.IsNullOrWhiteSpace(this.Model.Message))
+{
+    <div class="col-md-12">
+        <div class="alert alert-info">
+            @this.Model.Message
+        </div>
+    </div>
+}
 <table class="table">
     <thead>
         <tr>
@@ -18,17 +26,18 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.AlbumImages) {
-        <tr>
-            <td>
-                @item.ImageName
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.ImageId }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.AlbumImages)
+        {
+            <tr>
+                <td>
+                    @item.ImageName
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ImageId }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

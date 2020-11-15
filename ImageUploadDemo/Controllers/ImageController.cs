@@ -8,6 +8,7 @@ using AS.ImageAlbum.BusinessLogic.Interfaces;
 using AS.ImageAlbum.Website.Models.ImageData;
 using Microsoft.AspNetCore.Mvc;
 using AS.ImageAlbum.BusinessLogic.Models;
+using System.IO;
 
 namespace AS.ImageAlbum.Website.Controllers
 {
@@ -20,7 +21,7 @@ namespace AS.ImageAlbum.Website.Controllers
             this.service = service;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string message)
         {
             ImageIndex viewModel = new ImageIndex();
             try
@@ -59,13 +60,24 @@ namespace AS.ImageAlbum.Website.Controllers
             {
                 try
                 {
+                    if (model.ImageFile == null || model.ImageFile.Length == 0)
+                        throw new ArgumentException("Image not found");
+                    if (model.ImageFile.Length > 0)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            model.ImageFile.CopyTo(ms);
+                            command.image = new AlbumImage { Image = ms.ToArray(), ImageAlt = model.ImageAlt, ImageName = model.ImageName, ImageUrl = model.ImageUrl };
+                            command.image.ImageTags = new List<AlbumImageTag>();
+                        }
+                    }
+
                     
-                    command.image = new AlbumImage{Image=model.Image, ImageAlt=model.ImageAlt, ImageName=model.ImageName, ImageUrl=model.ImageUrl };
                     this.service.Create(command);
-                    if (command.Response != FindAllServicesQuery.SUCCESS)
+                    if (command.Response != CreateImageCommand.SUCCESS)
                     {
 
-                        throw new ArgumentException(FindAllServicesQuery.ERROR, "Business Logic Error");
+                        throw new ArgumentException(CreateImageCommand.ERROR, "Business Logic Error");
                     }
                 }
                 catch (Exception ex)
@@ -91,7 +103,7 @@ namespace AS.ImageAlbum.Website.Controllers
 
                     AlbumImage image = query.AlbumImages.Find(x => x.ImageId == id);
 
-                    model.Image = image.Image;
+                    model.ImageDisplay = String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(image.Image)); 
                     model.ImageAlt = image.ImageAlt;
                     model.ImageName = image.ImageName;
                     model.ImageUrl = image.ImageUrl;
@@ -107,6 +119,41 @@ namespace AS.ImageAlbum.Website.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(ImageEdit model)
+        {
+            EditImageCommand command = new EditImageCommand();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    command.image = new AlbumImage { ImageAlt = model.ImageAlt, ImageName = model.ImageName, ImageUrl = model.ImageUrl, ImageId=model.ImageId };
+                    command.image.ImageTags = new List<AlbumImageTag>();
+
+                    if (model.ImageFile!=null && model.ImageFile.Length > 0)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            model.ImageFile.CopyTo(ms);
+                            command.image.Image = ms.ToArray();
+                        }
+                    }
+                    this.service.Update(command);
+
+                    if (command.Response != EditImageCommand.SUCCESS)
+                    {
+
+                        throw new ArgumentException(EditImageCommand.ERROR, "Business Logic Error");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            return RedirectToAction("Edit", new { id=model.ImageId, message = "Image Saved!" });
         }
     }
 }

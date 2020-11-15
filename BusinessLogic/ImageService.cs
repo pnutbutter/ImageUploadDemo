@@ -76,5 +76,19 @@ namespace AS.ImageAlbum.BusinessLogic
             query.Response = FindAllServicesQuery.SUCCESS;
 
         }
+
+        public void Update(EditImageCommand command)
+        {
+            try
+            {
+                repository.Update(Convert(command.image));
+            }
+            catch (Exception ex)
+            {
+                command.Response = String.Format(EditImageCommand.ERROR, ex.Message);
+                return;
+            }
+            command.Response = EditImageCommand.SUCCESS;
+        }
     }
 }
