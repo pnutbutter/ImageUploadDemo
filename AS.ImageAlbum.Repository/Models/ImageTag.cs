@@ -9,5 +9,7 @@ namespace AS.ImageAlbum.Repository.Models
         public Guid ImageTagId { get; set; }
         public Guid ImageId { get; set; }
         public Guid TagId { get; set; }
+
+        public string Name { get; set; }
     }
 }

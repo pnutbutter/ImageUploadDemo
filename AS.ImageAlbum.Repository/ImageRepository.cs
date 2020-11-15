@@ -3,6 +3,7 @@ using AS.ImageAlbum.Repository.Interfaces;
 using AS.ImageAlbum.Repository.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AS.ImageAlbum.Repository
 {
@@ -93,6 +94,9 @@ namespace AS.ImageAlbum.Repository
                 MapToDBModel(entity, tblImage);
                 tblImage.ImageId = Guid.NewGuid();
                 dbContext.TblImage.Add(tblImage);
+
+                AddRemoveTags(tblImage.ImageId, entity.ImageTags);
+
                 this.dbContext.SaveChanges();
                 return tblImage.ImageId;
             }
@@ -107,6 +111,8 @@ namespace AS.ImageAlbum.Repository
             try
             {
                 TblImage tblImage = GetDBModelByID(entityToUpdate.ImageId);
+
+                //only update fields touched on the Image Table
                 if (tblImage.ImageAlt != entityToUpdate.ImageAlt)
                     tblImage.ImageAlt = entityToUpdate.ImageAlt;
                 if (tblImage.ImageName != entityToUpdate.ImageName)
@@ -116,12 +122,63 @@ namespace AS.ImageAlbum.Repository
                 if (entityToUpdate.AlbumImage != null && entityToUpdate.AlbumImage.Length > 0)
                     tblImage.AlbumImage = entityToUpdate.AlbumImage;
                 dbContext.TblImage.Update(tblImage);
+
+                AddRemoveTags(entityToUpdate.ImageId, entityToUpdate.ImageTags);
+
                 this.dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+
+        private void AddRemoveTags(Guid imageID, List<ImageTag> imageTags)
+        {
+            //only find if tags exist for the current list being sent back
+            string[] tagNames = imageTags.Select(t => t.Name).ToArray();
+
+            List<TblTag> existingTagsFromList = (from t in dbContext.TblTag
+                                                where tagNames.Contains(t.Tag)
+                                                select t).ToList();
+
+            //get all the tags currently tied to the image to see what has been added or removed
+            List<ImageTag> currentImageTags = (from it in dbContext.TblImageTag
+                                               join t in dbContext.TblTag on it.TagId equals t.TagId
+                                               where imageID == it.ImageId
+                                               select new ImageTag()
+                                               {
+                                                   ImageId = it.ImageId,
+                                                   ImageTagId = it.ImageTagId,
+                                                   TagId = it.TagId,
+                                                   Name = t.Tag
+                                               }).ToList();
+
+            foreach (ImageTag tag in imageTags)
+            {
+                //if tag already is related to image skip
+                if (currentImageTags.Find(ct => ct.Name == tag.Name) != null && string.IsNullOrWhiteSpace(currentImageTags.Find(ct => ct.Name == tag.Name).Name))
+                    continue;
+
+                
+                //Tag exists but imagetag does not exist - just create image tag record
+                if (existingTagsFromList.Find(et => et.Tag==tag.Name)!=null && string.IsNullOrWhiteSpace(existingTagsFromList.Find(et => et.Tag == tag.Name).Tag))
+                {
+                    //create image tag record
+                    dbContext.TblImageTag.Add(new TblImageTag { ImageId = imageID, TagId = existingTagsFromList.Find(et => et.Tag == tag.Name).TagId, ImageTagId = Guid.NewGuid() });
+                }
+                else
+                {
+                    //if tag doesn't exist create tag and image tag record
+                    //create tag
+                    Guid newTagGuid = Guid.NewGuid();
+                    dbContext.TblTag.Add(new TblTag { Tag = tag.Name, TagId = newTagGuid });
+
+                    //create image tag
+                    dbContext.TblImageTag.Add(new TblImageTag { ImageId = imageID, TagId = newTagGuid, ImageTagId = Guid.NewGuid() });
+                }
+            }
+
         }
 
         public virtual List<Image> GetAll()

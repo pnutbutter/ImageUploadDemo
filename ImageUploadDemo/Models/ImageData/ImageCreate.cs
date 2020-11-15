@@ -21,5 +21,9 @@ namespace AS.ImageAlbum.Website.Models.ImageData
         [StringLength(500, ErrorMessage = "Maximum 500 characters")]
         public string ImageAlt { get; set; }
 
+        public string[] TagNames { get; set; }
+        public Guid[] TagIDs { get; set; }
+
+
     }
 }

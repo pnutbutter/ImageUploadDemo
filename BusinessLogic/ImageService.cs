@@ -41,6 +41,15 @@ namespace AS.ImageAlbum.BusinessLogic
             aImage.ImageId = img.ImageId;
             aImage.ImageName = img.ImageName;
             aImage.ImageUrl = img.ImageUrl;
+            
+            if(img.ImageTags!=null && img.ImageTags.Count>0)
+            {
+                aImage.ImageTags = new List<ImageTag>();
+                foreach(AlbumImageTag tag in img.ImageTags)
+                {
+                    aImage.ImageTags.Add(new ImageTag { ImageId = img.ImageId, ImageTagId = tag.ImageTagId, TagId = tag.TagId, Name = tag.Name });
+                }
+            }
             return aImage;
         }
 

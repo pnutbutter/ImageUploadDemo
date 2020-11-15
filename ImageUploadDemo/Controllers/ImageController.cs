@@ -130,8 +130,24 @@ namespace AS.ImageAlbum.Website.Controllers
             try
             {
                 command.image = new AlbumImage { ImageAlt = model.ImageAlt, ImageName = model.ImageName, ImageUrl = model.ImageUrl, ImageId = model.ImageId };
-                command.image.ImageTags = new List<AlbumImageTag>();
 
+                //each tag should have a corrisponding tag name but just incase lets check
+                if (model.TagIDs!=null && model.TagIDs.Length>0 && model.TagNames!=null && model.TagNames.Length>0)
+                {
+                    if(model.TagNames.Length == model.TagIDs.Length)
+                    {
+                        command.image.ImageTags = new List<AlbumImageTag>();
+                        for(int i = 0; i<model.TagIDs.Length; i++)
+                        {
+                            command.image.ImageTags.Add(new AlbumImageTag { ImageId = model.ImageId, ImageTagId = model.TagIDs[i], Name = model.TagNames[i] });
+                        }
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Tag Name and Tag Ids don't have the same amount");
+                    }
+                }
+                
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
                     using (var ms = new MemoryStream())

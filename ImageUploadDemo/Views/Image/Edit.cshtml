@@ -5,6 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    .image-box {
+        width: 100%;
+        height:100%;
+    }
+</style>
+
 <h1>Edit</h1>
 
 <h4>ImageEdit</h4>
@@ -12,18 +19,21 @@
 <div class="row">
     @if (!string.IsNullOrWhiteSpace(this.Model.Message))
     {
-    <div class="col-md-12">
-        <div class="alert alert-info">
-            @this.Model.Message
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                @this.Model.Message
+            </div>
         </div>
-    </div>
     }
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form enctype="multipart/form-data" method="post" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <span id="tag-wrapper">
+
+            </span><input id="tag-input" type="text" /><button id="add-tag">Add Tag</button>
             <input asp-for="ImageId" type="hidden" />
             <div class="form-group">
-                <img src="@Model.ImageDisplay" alt="@Model.ImageAlt" />
+                <img src="@Model.ImageDisplay" alt="@Model.ImageAlt" class="image-box" />
             </div>
             <div class="form-group">
                 <label asp-for="ImageFile" class="control-label"></label>
@@ -61,12 +71,33 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script type="text/javascript">
+    <script type="text/javascript">
 
         // Add the following code if you want the name of the file appear on select
         $(".custom-file-input").on("change", function () {
             var fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });
-</script>
+
+        AddTag = function () {
+            
+            $('#tag-wrapper').append(('<span>' + $("#tag-input").val() + '<input type="hidden" name="TagNames" value="' + $("#tag-input").val() + '"><input type="hidden" name="TagIDs" value="00000000-0000-0000-0000-000000000000"></span>'));
+            $("#tag-input").val("");
+        }
+
+        $("#add-tag").click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            AddTag();
+            return false;
+        })
+        $("#tag-input").keypress(function (e) {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                e.stopPropagation();
+                AddTag();
+                return false;
+            }
+        });
+    </script>
 }
