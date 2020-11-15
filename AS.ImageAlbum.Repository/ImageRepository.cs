@@ -57,11 +57,12 @@ namespace AS.ImageAlbum.Repository
             return dbContext.TblImage.Find(id);
         }
 
-        public void Insert(Image entity)
+        public Guid Insert(Image entity)
         {
             TblImage tblImage = new TblImage();
             MapToDBModel(entity, tblImage);
             dbContext.TblImage.Add(tblImage);
+            return tblImage.ImageId;
         }
 
         public void Update(Image entityToUpdate)

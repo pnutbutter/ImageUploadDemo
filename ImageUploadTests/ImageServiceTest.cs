@@ -1,3 +1,4 @@
+using AS.ImageAlbum.BusinessLogic.DTO.Command;
 using AS.ImageAlbum.BusinessLogic.DTO.Query;
 using AS.ImageAlbum.Repository;
 using AS.ImageAlbum.Repository.Interfaces;
@@ -30,6 +31,25 @@ namespace AS.ImageAlbum.BusinessLogic.Tests
             imageService.FindAll(query);
             Assert.That(query.Response, Is.EqualTo(FindAllServicesQuery.SUCCESS));
             Assert.That(query.AlbumImages.Count, Is.EqualTo(5));
+        }
+
+        [TestMethod]
+        public void Create_ReturnsSuccessAndId()
+        {
+            Mock<ImageRepository> mockImageRepository = new Mock<ImageRepository>();
+            CreateImageCommand command = new CreateImageCommand();
+            command.image = new Models.AlbumImage();
+            command.image.Image = new byte[Convert.ToByte(1)];
+            command.image.ImageAlt = "1";
+            command.image.ImageName = "1";
+            command.image.ImageUrl = "1";
+            Image mockImage = createMockImage(1);
+            mockImageRepository.Setup(x => x.Insert(mockImage)).Returns(mockImage.ImageId);
+
+            ImageService imageService = new ImageService(mockImageRepository.Object);
+            imageService.Create(command);
+            Assert.That(command.Response, Is.EqualTo(CreateImageCommand.SUCCESS));
+            Assert.That(command.image.ImageId, Is.EqualTo(mockImage.ImageId));
         }
 
         private Image createMockImage(int variable)

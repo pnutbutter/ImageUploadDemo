@@ -51,11 +51,12 @@ namespace AS.ImageAlbum.Repository
             return dbContext.TblTag.Find(id);
         }
 
-        public void Insert(Tag entity)
+        public Guid Insert(Tag entity)
         {
             TblTag tblImage = new TblTag();
             MapToDBModel(entity, tblImage);
             dbContext.TblTag.Add(tblImage);
+            return tblImage.TagId;
         }
 
         public void Update(Tag entityToUpdate)
