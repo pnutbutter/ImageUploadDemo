@@ -7,5 +7,8 @@ namespace AS.ImageAlbum.Repository.Interfaces
 {
     public interface IImageRepository : IRepository<Image>
     {
+        List<Image> GetFromTo(int start, int end, List<Guid> tagFilters);
+
+        Image GetByImageURL(string ImageUrl);
     }
 }

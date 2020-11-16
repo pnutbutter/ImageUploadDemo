@@ -96,6 +96,24 @@ namespace AS.ImageAlbum.BusinessLogic
 
         }
 
+        public void FindFromToTagFilter(FindFromToTagFilterQuery query)
+        {
+            query.AlbumImages = new List<AlbumImage>();
+            try
+            {
+                foreach (Image img in repository.GetFromTo(query.BeginIndex, query.EndIndex, query.TagFilters))
+                {
+                    query.AlbumImages.Add(Convert(img));
+                }
+            }
+            catch (Exception ex)
+            {
+                query.Response = String.Format(FindAllServicesQuery.ERROR, ex.Message);
+                return;
+            }
+            query.Response = FindAllServicesQuery.SUCCESS;
+        }
+
         public void Update(EditImageCommand command)
         {
             try
@@ -116,6 +134,21 @@ namespace AS.ImageAlbum.BusinessLogic
             try
             {
                 query.Record = Convert(repository.GetByID(query.ImageId));
+            }
+            catch (Exception ex)
+            {
+                query.Response = String.Format(FindAllServicesQuery.ERROR, ex.Message);
+                return;
+            }
+            query.Response = FindAllServicesQuery.SUCCESS;
+        }
+
+        public void FindByImageUrl(FindByImageUrlQuery query)
+        {
+            try
+            {
+                Image img = repository.GetByImageURL(query.ImageUrl);
+                query.AlbumImage = new AlbumImage { Image = img.AlbumImage };
             }
             catch (Exception ex)
             {

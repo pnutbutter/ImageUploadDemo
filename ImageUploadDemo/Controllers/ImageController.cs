@@ -9,9 +9,13 @@ using AS.ImageAlbum.Website.Models.ImageData;
 using Microsoft.AspNetCore.Mvc;
 using AS.ImageAlbum.BusinessLogic.Models;
 using System.IO;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AS.ImageAlbum.Website.Controllers
 {
+
     public class ImageController : Controller
     {
         private IImageService service;
@@ -61,7 +65,7 @@ namespace AS.ImageAlbum.Website.Controllers
                 return View(model);
             try
             {
-                
+
                 if (model.ImageFile == null || model.ImageFile.Length == 0)
                     throw new ArgumentException("Image not found");
                 if (model.ImageFile.Length > 0)
@@ -152,12 +156,12 @@ namespace AS.ImageAlbum.Website.Controllers
                 command.image = new AlbumImage { ImageAlt = model.ImageAlt, ImageName = model.ImageName, ImageUrl = model.ImageUrl, ImageId = model.ImageId };
 
                 //each tag should have a corrisponding tag name but just incase lets check
-                if (model.TagIDs!=null && model.TagIDs.Length>0 && model.TagNames!=null && model.TagNames.Length>0)
+                if (model.TagIDs != null && model.TagIDs.Length > 0 && model.TagNames != null && model.TagNames.Length > 0)
                 {
-                    if(model.TagNames.Length == model.TagIDs.Length)
+                    if (model.TagNames.Length == model.TagIDs.Length)
                     {
                         command.image.ImageTags = new List<AlbumImageTag>();
-                        for(int i = 0; i<model.TagIDs.Length; i++)
+                        for (int i = 0; i < model.TagIDs.Length; i++)
                         {
                             command.image.ImageTags.Add(new AlbumImageTag { ImageId = model.ImageId, ImageTagId = model.TagIDs[i], Name = model.TagNames[i] });
                         }
@@ -167,7 +171,7 @@ namespace AS.ImageAlbum.Website.Controllers
                         throw new ArgumentException("Tag Name and Tag Ids don't have the same amount");
                     }
                 }
-                
+
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
                     using (var ms = new MemoryStream())
@@ -190,6 +194,63 @@ namespace AS.ImageAlbum.Website.Controllers
             }
 
             return RedirectToAction("Edit", new { id = model.ImageId, message = "Image Saved!" });
+        }
+
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        [AllowAnonymous]
+        //[EnableCors("CorsPolicy")]
+        public IActionResult ImageLoad([FromForm] ImageLoad model)
+        {
+            FindFromToTagFilterQuery query = new FindFromToTagFilterQuery();
+            List<ImageJson> imageList = new List<ImageJson>();
+            try
+            {
+                query.BeginIndex = model.BeginIndex;
+                query.EndIndex = model.EndIndex;
+                query.TagFilters = new List<Guid>();
+
+                if (model.TagFilters != null)
+                {
+                    foreach (string str in model.TagFilters)
+                    {
+                        query.TagFilters.Add(Guid.Parse(str));
+                    }
+                }
+                this.service.FindFromToTagFilter(query);
+
+                foreach (AlbumImage image in query.AlbumImages)
+                {
+                    imageList.Add(new ImageJson { ImageAlt = image.ImageAlt.Trim(), ImageName = image.ImageName, ImageUrl = image.ImageUrl });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return Json(JsonConvert.SerializeObject(imageList));
+        }
+
+        [HttpGet]
+        public ActionResult Images(string id)
+        {
+            FindByImageUrlQuery query = new FindByImageUrlQuery();
+            try
+            {
+                query.ImageUrl = id;
+
+                this.service.FindByImageUrl(query);
+
+                MemoryStream imageStream = new MemoryStream();
+                imageStream.Write(query.AlbumImage.Image, 0, query.AlbumImage.Image.Length);
+                imageStream.Position = 0;
+                return new FileStreamResult(imageStream, "image/jpeg");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

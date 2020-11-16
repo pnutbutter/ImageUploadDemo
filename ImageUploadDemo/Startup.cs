@@ -15,6 +15,7 @@ using Autofac.Extensions.DependencyInjection;
 using AS.ImageAlbum.Repository;
 using AS.ImageAlbum.Repository.Interfaces;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Serialization;
 
 namespace ImageUploadDemo
 {
@@ -38,8 +39,29 @@ namespace ImageUploadDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            /*
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
+            services.AddMvc();
+            */
+            services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddOptions();
+            services.AddRazorPages().AddNewtonsoftJson();
+            //had to install pakcage for NewtonsoftJson MVC Core and version for 3.1
+            /*
+            services.AddMvc().AddNewtonsoftJson().
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                // Use the default property (Pascal) casing
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            });
+            */
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

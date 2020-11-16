@@ -14,5 +14,9 @@ namespace AS.ImageAlbum.BusinessLogic.Interfaces
         void Update(EditImageCommand command);
 
         void FindByID(FindByIDQuery query);
+        void FindFromToTagFilter(FindFromToTagFilterQuery query);
+
+        void FindByImageUrl(FindByImageUrlQuery query);
+
     }
 }

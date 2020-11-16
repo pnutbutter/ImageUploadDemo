@@ -68,29 +68,29 @@ namespace AS.ImageAlbum.Repository
             {
                 //populate image fields
                 Image img = (from it in dbContext.TblImage
-                                                       where id == it.ImageId
-                                                       select new Image()
-                                                       {
-                                                           ImageId = it.ImageId,
-                                                           AlbumImage = it.AlbumImage,
-                                                           ImageAlt = it.ImageAlt,
-                                                           ImageName = it.ImageName,
-                                                           ImageUrl = it.ImageUrl
-                                                       }).SingleOrDefault();
+                             where id == it.ImageId
+                             select new Image()
+                             {
+                                 ImageId = it.ImageId,
+                                 AlbumImage = it.AlbumImage,
+                                 ImageAlt = it.ImageAlt,
+                                 ImageName = it.ImageName,
+                                 ImageUrl = it.ImageUrl
+                             }).SingleOrDefault();
                 if (img == null || img.ImageId != id)
                     throw new ArgumentException("Image not found");
 
                 //Populate image tags
                 img.ImageTags = (from it in dbContext.TblImageTag
-                                                   join t in dbContext.TblTag on it.TagId equals t.TagId
-                                                   where id == it.ImageId
-                                                   select new ImageTag()
-                                                   {
-                                                       ImageId = it.ImageId,
-                                                       ImageTagId = it.ImageTagId,
-                                                       TagId = it.TagId,
-                                                       Name = t.Tag
-                                                   }).ToList();
+                                 join t in dbContext.TblTag on it.TagId equals t.TagId
+                                 where id == it.ImageId
+                                 select new ImageTag()
+                                 {
+                                     ImageId = it.ImageId,
+                                     ImageTagId = it.ImageTagId,
+                                     TagId = it.TagId,
+                                     Name = t.Tag
+                                 }).ToList();
 
                 return img;
             }
@@ -165,8 +165,8 @@ namespace AS.ImageAlbum.Repository
             string[] tagNames = imageTags.Select(t => t.Name).ToArray();
 
             List<TblTag> existingTagsFromList = (from t in dbContext.TblTag
-                                                where tagNames.Contains(t.Tag)
-                                                select t).ToList();
+                                                 where tagNames.Contains(t.Tag)
+                                                 select t).ToList();
 
             //get all the tags currently tied to the image to see what has been added or removed
             List<ImageTag> currentImageTags = (from it in dbContext.TblImageTag
@@ -182,12 +182,12 @@ namespace AS.ImageAlbum.Repository
 
             //remove tags no longer there
             List<ImageTag> deletedTags = currentImageTags.FindAll(ct => !existingTagsFromList.Select(et => et.Tag).ToArray().Contains(ct.Name));
-            foreach(ImageTag tag in deletedTags)
+            foreach (ImageTag tag in deletedTags)
             {
                 //remove from list of tags to insert in next loop
                 imageTags.Remove(tag);
                 //remove ImagetTag record connecting image to tag
-                TblImageTag imgTag = new TblImageTag() { ImageTagId=tag.ImageTagId };
+                TblImageTag imgTag = new TblImageTag() { ImageTagId = tag.ImageTagId };
                 dbContext.TblImageTag.Attach(imgTag);
                 dbContext.TblImageTag.Remove(imgTag);
             }
@@ -199,7 +199,7 @@ namespace AS.ImageAlbum.Repository
                     continue;
 
                 //Tag exists but imagetag does not exist - just create image tag record
-                if (existingTagsFromList.Find(et => et.Tag==tag.Name)!=null && !string.IsNullOrWhiteSpace(existingTagsFromList.Find(et => et.Tag == tag.Name).Tag))
+                if (existingTagsFromList.Find(et => et.Tag == tag.Name) != null && !string.IsNullOrWhiteSpace(existingTagsFromList.Find(et => et.Tag == tag.Name).Tag))
                 {
                     //create image tag record
                     dbContext.TblImageTag.Add(new TblImageTag { ImageId = imageID, TagId = existingTagsFromList.Find(et => et.Tag == tag.Name).TagId, ImageTagId = Guid.NewGuid() });
@@ -233,6 +233,65 @@ namespace AS.ImageAlbum.Repository
             {
                 throw ex;
             }
+        }
+
+        public virtual List<Image> GetFromTo(int start, int end, List<Guid> tagFilters)
+        {
+            try
+            {
+                List<Image> imageList;
+                int takeAmount = end - start;
+                if (tagFilters != null && tagFilters.Count > 0)
+                {
+                    imageList = (from i in dbContext.TblImage
+                                 join it in dbContext.TblImageTag on i.ImageId equals it.ImageId
+                                 where tagFilters.Contains(it.TagId)
+                                 select new Image()
+                                 {
+                                     ImageUrl = i.ImageUrl,
+                                     ImageAlt = i.ImageAlt,
+                                     ImageName = i.ImageName,
+                                 }).Skip(start).Take(takeAmount).ToList();
+                }
+                else
+                {
+                    imageList = (from i in dbContext.TblImage
+                                 select new Image()
+                                 {
+                                     ImageUrl = i.ImageUrl,
+                                     ImageAlt = i.ImageAlt,
+                                     ImageName = i.ImageName,
+                                 }).Skip(start).Take(takeAmount).ToList();
+
+                    //.Skip(start).Take(end - start)
+                }
+
+
+                return imageList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public Image GetByImageURL(string ImageUrl)
+        {
+            Image img;
+            try
+            {
+                img = (from i in dbContext.TblImage
+                       where i.ImageUrl == ImageUrl
+                       select new Image()
+                       {
+                           AlbumImage = i.AlbumImage
+                       }).SingleOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return img;
         }
     }
 }

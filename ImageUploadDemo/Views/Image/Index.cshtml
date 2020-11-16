@@ -5,6 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    .image-box {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
 <h1>View</h1>
 
 <p>
@@ -41,3 +48,55 @@
         }
     </tbody>
 </table>
+<div id="album" class="row text-center text-lg-left">
+    <div class="col-lg-3 col-md-4 col-6 img-block">
+        <a href="#" class="d-block mb-4 h-100">
+            <img class="img-fluid img-thumbnail image-box" src="test" alt="">
+        </a>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var imageContainer = $(".img-block").clone();
+            $(".img-block").remove();
+
+            var data = {
+                BeginIndex: '0',
+                EndIndex: '4'
+            }
+            /*
+            var data = {
+                BeginIndex: '1',
+                EndIndex: '4',
+                TagFilters: ["77a3eff9-c040-4502-83ac-4c08c581822b","7f6bf13e-f383-459f-a82b-fab43bb7309b"]
+            }
+            */
+            var dataType = 'application/x-www-form-urlencoded; charset=utf-8';
+            $.ajax({
+                type: "POST",
+                url: '/Image/ImageLoad',
+                dataType: 'json',
+                contentType: dataType,
+                data: data,
+                success: function (data) {
+                    console.log(data);
+                    var items = JSON.parse(data);
+
+                    for (var i = 0; i < items.length; i++) {
+                        console.log(items[i].ImageUrl);
+                        console.log(items[i].ImageName);
+                        console.log(items[i].ImageAlt);
+                        var localImageContainer = imageContainer.clone();
+                        localImageContainer.find("img").attr("src", "/Image/Images/"+items[i].ImageUrl);
+                        $("#album").append($(localImageContainer));
+                    }
+
+                }
+            });
+        })
+
+
+
+    </script>
+}

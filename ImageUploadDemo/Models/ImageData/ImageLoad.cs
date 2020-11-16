@@ -1,4 +1,5 @@
 ﻿using AS.ImageAlbum.BusinessLogic.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace AS.ImageAlbum.Website.Models.ImageData
 {
-    public class ImageIndex
+    public class ImageLoad
     {
-        public string Message { get; set; }
+        public int BeginIndex { get; set; }
+        public int EndIndex { get; set; }
         public string[] TagFilters { get; set; }
-        public Guid[] TagFilterIds { get; set; }
-        public List<AlbumImage> AlbumImages { get; set; }
     }
 }
