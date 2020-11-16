@@ -10,9 +10,12 @@
 <h4>ImageCreate</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form enctype="multipart/form-data" method="post" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <span id="tag-wrapper">
+            </span>
+            <input id="tag-input" type="text" /><button id="add-tag">Add Tag</button>
             <div class="form-group">
                 <label asp-for="ImageFile" class="control-label"></label>
                 <div class="custom-file">
@@ -56,6 +59,32 @@
         $(".custom-file-input").on("change", function () {
             var fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+
+        AddTag = function () {
+            $('#tag-wrapper').append('<span class="tag-parent"><button type="button" class="btn btn-primary tag-button">' + $("#tag-input").val() + '<span class="badge badge-danger">X</span></button><input type="hidden" name="TagNames" value="' + $("#tag-input").val() + '" /><input type="hidden" name="TagIDs" value="00000000-0000-0000-0000-000000000000"></span>');
+            $("#tag-input").val("");
+        }
+
+        $("#add-tag").click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            AddTag();
+            return false;
+        })
+        $("#tag-input").keypress(function (e) {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                e.stopPropagation();
+                AddTag();
+                return false;
+            }
+        });
+        $(".tag-button").on("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).parent().remove();
         });
     </script>
 }

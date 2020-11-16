@@ -61,6 +61,7 @@ namespace AS.ImageAlbum.Website.Controllers
                 return View(model);
             try
             {
+                
                 if (model.ImageFile == null || model.ImageFile.Length == 0)
                     throw new ArgumentException("Image not found");
                 if (model.ImageFile.Length > 0)
@@ -73,6 +74,21 @@ namespace AS.ImageAlbum.Website.Controllers
                     }
                 }
 
+                if (model.TagIDs != null && model.TagIDs.Length > 0 && model.TagNames != null && model.TagNames.Length > 0)
+                {
+                    if (model.TagNames.Length == model.TagIDs.Length)
+                    {
+                        command.image.ImageTags = new List<AlbumImageTag>();
+                        for (int i = 0; i < model.TagIDs.Length; i++)
+                        {
+                            command.image.ImageTags.Add(new AlbumImageTag { ImageTagId = model.TagIDs[i], Name = model.TagNames[i] });
+                        }
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Tag Name and Tag Ids don't have the same amount");
+                    }
+                }
 
                 this.service.Create(command);
                 if (command.Response != CreateImageCommand.SUCCESS)
