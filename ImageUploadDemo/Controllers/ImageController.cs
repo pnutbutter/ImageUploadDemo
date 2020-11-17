@@ -221,7 +221,7 @@ namespace AS.ImageAlbum.Website.Controllers
 
                 foreach (AlbumImage image in query.AlbumImages)
                 {
-                    imageList.Add(new ImageJson { ImageAlt = image.ImageAlt.Trim(), ImageName = image.ImageName, ImageUrl = image.ImageUrl });
+                    imageList.Add(new ImageJson { ImageAlt = image.ImageAlt.Trim(), ImageName = image.ImageName, ImageUrl = image.ImageUrl, ImageId = image.ImageId });
                 }
 
             }

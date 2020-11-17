@@ -5,73 +5,138 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@if (!string.IsNullOrWhiteSpace(this.Model.Message))
+{
+    <div class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>@this.Model.Message</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 <style>
+    .img-block {
+        padding-right: 0px;
+        padding-left: 0px;
+        margin: 0;
+    }
+
     .image-box {
         width: 100%;
         height: 100%;
     }
+
+    .image-overlay {
+        position: absolute;
+        bottom: 100%;
+        width: 100%;
+        opacity: 0;
+        background-color: rgba(0, 0, 0, 0);
+        color: white;
+        margin: 0;
+        bottom: 0;
+        padding: 5px;
+        transition: all .3s ease .15s;
+    }
+
+    .img-block:hover .image-overlay {
+        background-color: rgba(0, 0, 0, .75);
+        opacity: 1;
+        height: auto;
+    }
 </style>
-
-<h1>View</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-@if (!string.IsNullOrWhiteSpace(this.Model.Message))
-{
-    <div class="col-md-12">
-        <div class="alert alert-info">
-            @this.Model.Message
-        </div>
-    </div>
-}
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.AlbumImages)
-        {
-            <tr>
-                <td>
-                    @item.ImageName
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ImageId }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
 <div id="album" class="row text-center text-lg-left">
     <div class="col-lg-3 col-md-4 col-6 img-block">
-        <a href="#" class="d-block mb-4 h-100">
-            <img class="img-fluid img-thumbnail image-box" src="test" alt="">
-        </a>
+        <img class="img-fluid image-box" src="test" alt="">
+        <div class="image-overlay">
+            <p class="image-title">
+            </p>
+            <p class="text-center">
+                <a href="#" class="btn btn-primary edit-image-button">Edit</a> <a href="#" class="btn btn-primary delete-image-button">Delete</a>
+            </p>
+        </div>
+    </div>
+</div>
+<div class="row text-center">
+    <div class="col-sm-12">
+        <p>
+            <a href="#" id="load-image-btn" class="btn btn-primary" data-begin="4">Load More Images</a>
+        </p>
     </div>
 </div>
 @section Scripts {
     <script type="text/javascript">
-        $(document).ready(function () {
-            var imageContainer = $(".img-block").clone();
-            $(".img-block").remove();
 
-            var data = {
-                BeginIndex: '0',
-                EndIndex: '4'
+        //global variable to reference image HTML - encapsulating into a function
+        var imageContainer=null;
+        getImageContainer = function () {
+            //if first time load image container
+            if (!imageContainer) {
+                imageContainer = $(".img-block").clone();
+                $(".img-block").remove();
             }
-            /*
-            var data = {
-                BeginIndex: '1',
-                EndIndex: '4',
-                TagFilters: ["77a3eff9-c040-4502-83ac-4c08c581822b","7f6bf13e-f383-459f-a82b-fab43bb7309b"]
+            return imageContainer;
+        }
+
+        //encapsulate static load amount
+        getLoadAmount = function()
+        {
+            return 4;
+        }
+
+        $(document).ready(function () {
+            //initial page load
+            LoadImages(0, getLoadAmount(), null);
+            //page loads on load button click
+            $("#load-image-btn").click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var begin = $(this).data("begin");
+                LoadImages(begin, begin + getLoadAmount(), null);
+                //update data begin for next button click
+                $(this).data("begin", begin + getLoadAmount());
+            })
+        })
+
+
+        LoadImages = function (beginIndex, endIndex, tagFilters) {
+
+            var data;
+
+            //pass filters if they exist, unsure if an array JSON parse will map to model binding so formatting directly for now
+            if (tagFilters != null && tagFilters.length > 0) {
+                var filterString = '['
+                for (var i = 0; i < tagFilters.length; i++) {
+                    if (tagFilters.length == (i + 1)) {
+                        filterString = filterString + '"' + tagFilters[i] + '"'
+                    } else {
+                        filterString = filterString + '"' + tagFilters[i] + '",';
+                    }
+                }
+                filterString = filterString + ']';
+
+                data = {
+                    BeginIndex: beginIndex,
+                    EndIndex: endIndex,
+                    TagFilters: filterString
+                };
+            } else {
+                data = {
+                    BeginIndex: beginIndex,
+                    EndIndex: endIndex,
+                }
             }
-            */
+
+            //dynamically load images
             var dataType = 'application/x-www-form-urlencoded; charset=utf-8';
             $.ajax({
                 type: "POST",
@@ -84,17 +149,18 @@
                     var items = JSON.parse(data);
 
                     for (var i = 0; i < items.length; i++) {
-                        console.log(items[i].ImageUrl);
-                        console.log(items[i].ImageName);
-                        console.log(items[i].ImageAlt);
-                        var localImageContainer = imageContainer.clone();
-                        localImageContainer.find("img").attr("src", "/Image/Images/"+items[i].ImageUrl);
+                        var localImageContainer = getImageContainer().clone();
+                        localImageContainer.find("img").attr("src", "/Image/Images/" + items[i].ImageUrl);
+                        localImageContainer.find("img").attr("alt", items[i].ImageAlt);
+                        localImageContainer.find(".edit-image-button").attr("href", "@Url.Action("Edit")/"+items[i].ImageId)
+                        localImageContainer.find(".image-title").text(items[i].ImageName);
+
                         $("#album").append($(localImageContainer));
                     }
 
                 }
             });
-        })
+        }
 
 
 

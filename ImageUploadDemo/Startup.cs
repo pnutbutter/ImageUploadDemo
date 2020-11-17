@@ -53,6 +53,7 @@ namespace ImageUploadDemo
             services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddOptions();
             services.AddRazorPages().AddNewtonsoftJson();
+
             //had to install pakcage for NewtonsoftJson MVC Core and version for 3.1
             /*
             services.AddMvc().AddNewtonsoftJson().
@@ -96,7 +97,7 @@ namespace ImageUploadDemo
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Image}/{action=Index}/{id?}");
             });
         }
     }

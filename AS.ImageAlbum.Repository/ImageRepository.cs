@@ -251,6 +251,7 @@ namespace AS.ImageAlbum.Repository
                                      ImageUrl = i.ImageUrl,
                                      ImageAlt = i.ImageAlt,
                                      ImageName = i.ImageName,
+                                     ImageId = i.ImageId
                                  }).Skip(start).Take(takeAmount).ToList();
                 }
                 else
@@ -261,6 +262,7 @@ namespace AS.ImageAlbum.Repository
                                      ImageUrl = i.ImageUrl,
                                      ImageAlt = i.ImageAlt,
                                      ImageName = i.ImageName,
+                                     ImageId = i.ImageId
                                  }).Skip(start).Take(takeAmount).ToList();
 
                     //.Skip(start).Take(end - start)
