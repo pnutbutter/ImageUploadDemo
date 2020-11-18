@@ -46,7 +46,7 @@ namespace AS.ImageAlbum.Website.Controllers
                 }
                 else
                 {
-                    throw new ArgumentException(FindAllServicesQuery.ERROR, "Business Logic Error");
+                    throw new ArgumentException(EventMessage.ERROR, "Business Logic Error");
                 }
             }
             catch (Exception ex)
@@ -141,7 +141,7 @@ namespace AS.ImageAlbum.Website.Controllers
                 }
                 else
                 {
-                    throw new ArgumentException(FindAllServicesQuery.ERROR, "Business Logic Error");
+                    throw new ArgumentException(EventMessage.ERROR, "Business Logic Error");
                 }
             }
             catch (Exception ex)
@@ -287,7 +287,7 @@ namespace AS.ImageAlbum.Website.Controllers
                 }
                 else
                 {
-                    throw new ArgumentException(FindAllServicesQuery.ERROR, "Business Logic Error");
+                    throw new ArgumentException(EventMessage.ERROR, "Business Logic Error");
                 }
             }
             catch (Exception ex)

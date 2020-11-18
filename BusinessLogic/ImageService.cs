@@ -72,10 +72,10 @@ namespace AS.ImageAlbum.BusinessLogic
             }
             catch (Exception ex)
             {
-                command.Response = String.Format(FindAllServicesQuery.ERROR, ex.Message);
+                command.Response = String.Format(EventMessage.ERROR, ex.Message);
                 return;
             }
-            command.Response = FindAllServicesQuery.SUCCESS;
+            command.Response = EventMessage.SUCCESS;
         }
 
         public void FindFromToTagFilter(FindFromToTagFilterQuery query)
@@ -90,10 +90,10 @@ namespace AS.ImageAlbum.BusinessLogic
             }
             catch (Exception ex)
             {
-                query.Response = String.Format(FindAllServicesQuery.ERROR, ex.Message);
+                query.Response = String.Format(EventMessage.ERROR, ex.Message);
                 return;
             }
-            query.Response = FindAllServicesQuery.SUCCESS;
+            query.Response = EventMessage.SUCCESS;
         }
 
         public void Update(EditImageCommand command)
@@ -133,10 +133,10 @@ namespace AS.ImageAlbum.BusinessLogic
             }
             catch (Exception ex)
             {
-                query.Response = String.Format(FindAllServicesQuery.ERROR, ex.Message);
+                query.Response = String.Format(EventMessage.ERROR, ex.Message);
                 return;
             }
-            query.Response = FindAllServicesQuery.SUCCESS;
+            query.Response = EventMessage.SUCCESS;
         }
 
         public void FindByImageUrl(FindByImageUrlQuery query)
@@ -148,10 +148,10 @@ namespace AS.ImageAlbum.BusinessLogic
             }
             catch (Exception ex)
             {
-                query.Response = String.Format(FindAllServicesQuery.ERROR, ex.Message);
+                query.Response = String.Format(EventMessage.ERROR, ex.Message);
                 return;
             }
-            query.Response = FindAllServicesQuery.SUCCESS;
+            query.Response = EventMessage.SUCCESS;
         }
 
         public void FindActiveTags(FindActiveTagsQuery query)

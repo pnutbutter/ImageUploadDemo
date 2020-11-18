@@ -1,5 +1,7 @@
+using AS.ImageAlbum.BusinessLogic;
 using AS.ImageAlbum.BusinessLogic.DTO.Command;
 using AS.ImageAlbum.BusinessLogic.DTO.Query;
+using AS.ImageAlbum.BusinessLogic.Models;
 using AS.ImageAlbum.Repository;
 using AS.ImageAlbum.Repository.Interfaces;
 using AS.ImageAlbum.Repository.Models;
@@ -11,11 +13,12 @@ using System;
 using System.Collections.Generic;
 using Assert = NUnit.Framework.Assert;
 
-namespace AS.ImageAlbum.BusinessLogic.Tests
+namespace AS.ImageAlbum.UniteTests
 {
     [TestClass]
     public class ImageServiceTest
     {
+        /*
         [TestMethod]
         public void FindAllImages_ReturnsSuccessAndItems()
         {
@@ -32,13 +35,14 @@ namespace AS.ImageAlbum.BusinessLogic.Tests
             Assert.That(query.Response, Is.EqualTo(FindAllServicesQuery.SUCCESS));
             Assert.That(query.AlbumImages.Count, Is.EqualTo(5));
         }
+        */
 
         [TestMethod]
         public void Create_ReturnsSuccessAndId()
         {
             Mock<ImageRepository> mockImageRepository = new Mock<ImageRepository>();
             CreateImageCommand command = new CreateImageCommand();
-            command.image = new Models.AlbumImage();
+            command.image = new AlbumImage();
             command.image.ImageAlt = "1";
             command.image.ImageName = "1";
             command.image.ImageUrl = "1";

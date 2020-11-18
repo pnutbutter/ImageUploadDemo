@@ -9,11 +9,11 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "AS.ImageAlbum.DemoDB", "Ima
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AS.ImageAlbum.DataAccess", "DataAccess\AS.ImageAlbum.DataAccess.csproj", "{95F8A40C-96CF-4801-A220-7D10A322C68F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AS.ImageAlbum.BusinessLogic", "BusinessLogic\AS.ImageAlbum.BusinessLogic.csproj", "{6FAF97E7-2E47-4C93-92EC-ADF14CF3D09D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AS.ImageAlbum.BusinessLogic", "BusinessLogic\AS.ImageAlbum.BusinessLogic.csproj", "{6FAF97E7-2E47-4C93-92EC-ADF14CF3D09D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AS.ImageAlbum.BusinessLogic.Tests", "ImageUploadTests\AS.ImageAlbum.BusinessLogic.Tests.csproj", "{F4D6305E-6C70-4574-898C-BDB412DD1598}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AS.ImageAlbum.UnitTests", "ImageUploadTests\AS.ImageAlbum.UnitTests.csproj", "{F4D6305E-6C70-4574-898C-BDB412DD1598}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AS.ImageAlbum.Repository", "AS.ImageAlbum.Repository\AS.ImageAlbum.Repository.csproj", "{27CD468E-FA03-4C4C-ACC6-65ED41E35E1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AS.ImageAlbum.Repository", "AS.ImageAlbum.Repository\AS.ImageAlbum.Repository.csproj", "{27CD468E-FA03-4C4C-ACC6-65ED41E35E1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
