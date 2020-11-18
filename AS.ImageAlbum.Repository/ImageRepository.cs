@@ -15,53 +15,6 @@ namespace AS.ImageAlbum.Repository
             dbContext = new WebsiteDBContext();
         }
 
-        private Image MapToRepoModel(TblImage image)
-        {
-            Image repoImage = new Image();
-            repoImage.AlbumImage = image.AlbumImage;
-            repoImage.ImageAlt = image.ImageAlt;
-            repoImage.ImageId = image.ImageId;
-            repoImage.ImageName = image.ImageName;
-            repoImage.ImageUrl = image.ImageUrl;
-
-            return repoImage;
-        }
-
-        private void MapToDBModel(Image repoImage, TblImage image)
-        {
-            image.AlbumImage = repoImage.AlbumImage;
-            image.ImageAlt = repoImage.ImageAlt;
-            image.ImageId = repoImage.ImageId;
-            image.ImageName = repoImage.ImageName;
-            image.ImageUrl = repoImage.ImageUrl;
-        }
-
-        public virtual void Delete(Image entityToDelete)
-        {
-            try
-            {
-                TblImage tblImage = GetDBModelByID(entityToDelete.ImageId);
-                dbContext.TblImage.Remove(tblImage);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public virtual void Delete(object id)
-        {
-            try
-            {
-                TblImage entity = dbContext.TblImage.Find(id);
-                Delete(entity);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         public virtual void DeleteImage(Guid id)
         {
             try
@@ -121,24 +74,16 @@ namespace AS.ImageAlbum.Repository
             }
         }
 
-        private TblImage GetDBModelByID(object id)
-        {
-            try
-            {
-                return dbContext.TblImage.Find(id);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         public virtual Guid Insert(Image entity)
         {
             try
             {
                 TblImage tblImage = new TblImage();
-                MapToDBModel(entity, tblImage);
+                entity.AlbumImage = tblImage.AlbumImage;
+                entity.ImageAlt = tblImage.ImageAlt;
+                entity.ImageId = tblImage.ImageId;
+                entity.ImageName = tblImage.ImageName;
+                entity.ImageUrl = tblImage.ImageUrl;
                 tblImage.ImageId = Guid.NewGuid();
                 dbContext.TblImage.Add(tblImage);
 
@@ -157,7 +102,7 @@ namespace AS.ImageAlbum.Repository
         {
             try
             {
-                TblImage tblImage = GetDBModelByID(entityToUpdate.ImageId);
+                TblImage tblImage = dbContext.TblImage.Find(entityToUpdate.ImageId); ;
 
                 //only update fields touched on the Image Table
                 if (tblImage.ImageAlt != entityToUpdate.ImageAlt)
@@ -237,23 +182,6 @@ namespace AS.ImageAlbum.Repository
                 }
             }
 
-        }
-
-        public virtual List<Image> GetAll()
-        {
-            try
-            {
-                List<Image> imageList = new List<Image>();
-                foreach (TblImage tblImage in dbContext.TblImage)
-                {
-                    imageList.Add(MapToRepoModel(tblImage));
-                }
-                return imageList;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
 
         public virtual List<Image> GetFromTo(int start, int end, List<Guid> tagFilters, string search)

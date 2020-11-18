@@ -78,25 +78,6 @@ namespace AS.ImageAlbum.BusinessLogic
             command.Response = FindAllServicesQuery.SUCCESS;
         }
 
-        public void FindAll(FindAllServicesQuery query)
-        {
-            query.AlbumImages = new List<AlbumImage>();
-            try
-            {
-                foreach (Image img in repository.GetAll())
-                {
-                    query.AlbumImages.Add(Convert(img));
-                }
-            }
-            catch (Exception ex)
-            {
-                query.Response = String.Format(FindAllServicesQuery.ERROR, ex.Message);
-                return;
-            }
-            query.Response = FindAllServicesQuery.SUCCESS;
-
-        }
-
         public void FindFromToTagFilter(FindFromToTagFilterQuery query)
         {
             query.AlbumImages = new List<AlbumImage>();

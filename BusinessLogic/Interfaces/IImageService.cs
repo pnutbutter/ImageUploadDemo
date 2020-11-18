@@ -8,7 +8,6 @@ namespace AS.ImageAlbum.BusinessLogic.Interfaces
 {
     public interface IImageService
     {
-        void FindAll(FindAllServicesQuery query);
         void Create(CreateImageCommand command);
 
         void Update(EditImageCommand command);
