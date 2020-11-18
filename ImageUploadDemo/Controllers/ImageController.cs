@@ -29,6 +29,7 @@ namespace AS.ImageAlbum.Website.Controllers
         public IActionResult Index(string message)
         {
             ImageIndex viewModel = new ImageIndex();
+            viewModel.Message = message;
             try
             {
                 FindActiveTagsQuery query = new FindActiveTagsQuery();
@@ -260,5 +261,67 @@ namespace AS.ImageAlbum.Website.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet]
+        public IActionResult Delete(Guid id)
+        {
+            ImageEdit model = new ImageEdit();
+            model.ImageId = id;
+            try
+            {
+                FindByIDQuery query = new FindByIDQuery();
+                query.ImageId = id;
+                this.service.FindByID(query);
+                if (query.Response == FindByIDQuery.SUCCESS)
+                {
+                    model.ImageDisplay = String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(query.Record.Image));
+                    model.ImageAlt = query.Record.ImageAlt;
+                    model.ImageName = query.Record.ImageName;
+                    model.ImageUrl = query.Record.ImageUrl;
+
+                    query.Record.ImageTags.Sort((t1, t2) => string.Compare(t1.Name, t2.Name));
+
+                    model.TagIDs = query.Record.ImageTags.Select(t => t.ImageTagId).ToArray();
+                    model.TagNames = query.Record.ImageTags.Select(t => t.Name).ToArray();
+
+                }
+                else
+                {
+                    throw new ArgumentException(FindAllServicesQuery.ERROR, "Business Logic Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(ImageDelete model)
+        {
+            DeleteImageCommand command = new DeleteImageCommand();
+            try
+            {
+
+                command.ImageId = model.ImageId;
+                service.DeleteImage(command);
+
+                if (command.Response != EditImageCommand.SUCCESS)
+                {
+
+                    throw new ArgumentException(EditImageCommand.ERROR, "Business Logic Error");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return RedirectToAction("Index", new { message = "Image deleted" });
+        }
+
     }
 }

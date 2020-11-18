@@ -62,6 +62,27 @@ namespace AS.ImageAlbum.Repository
             }
         }
 
+        public virtual void DeleteImage(Guid id)
+        {
+            try
+            {
+                TblImage entity = new TblImage { ImageId=id};
+                List<TblImageTag> imageTags = (from  it in dbContext.TblImageTag 
+                                              where it.ImageId==id
+                                              select it).ToList();
+                foreach(TblImageTag imageTag in imageTags)
+                {
+                    dbContext.TblImageTag.Remove(imageTag);
+                }
+                dbContext.TblImage.Remove(entity);
+                this.dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public virtual Image GetByID(Guid id)
         {
             try

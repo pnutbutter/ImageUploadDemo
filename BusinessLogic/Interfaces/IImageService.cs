@@ -20,5 +20,7 @@ namespace AS.ImageAlbum.BusinessLogic.Interfaces
 
         void FindActiveTags(FindActiveTagsQuery query);
 
+        void DeleteImage(DeleteImageCommand command);
+
     }
 }

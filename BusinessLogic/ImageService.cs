@@ -129,6 +129,20 @@ namespace AS.ImageAlbum.BusinessLogic
             command.Response = EditImageCommand.SUCCESS;
         }
 
+        public void DeleteImage (DeleteImageCommand command)
+        {
+            try
+            {
+                repository.DeleteImage(command.ImageId);
+            }
+            catch (Exception ex)
+            {
+                command.Response = String.Format(EventMessage.ERROR, ex.Message);
+                return;
+            }
+            command.Response = EventMessage.SUCCESS;
+        }
+
         public void FindByID(FindByIDQuery query)
         {
             query.Record = new AlbumImage();

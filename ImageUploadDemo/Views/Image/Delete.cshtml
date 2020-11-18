@@ -1,0 +1,80 @@
+﻿@model AS.ImageAlbum.Website.Models.ImageData.ImageEdit
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .image-box {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<h1>Edit</h1>
+
+<h4>ImageEdit</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form method="post" asp-action="Delete">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <span id="tag-wrapper">
+                @for (int i = 0; i < this.Model.TagIDs.Length; i++)
+                {
+                    <span class="tag-parent">
+                        <a href="#" class="btn btn-primary tag-button">@this.Model.TagNames[i]</a>
+                    </span>
+                }
+            </span>
+            <input asp-for="ImageId" type="hidden" />
+            <div class="form-group">
+                <img src="@Model.ImageDisplay" alt="@Model.ImageAlt" class="image-box" />
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageName" class="control-label"></label>
+                <span>@this.Model.ImageName</span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUrl" class="control-label"></label>
+                <span>@this.Model.ImageUrl</span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageAlt" class="control-label"></label>
+                <span>@this.Model.ImageAlt</span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Delete" class="btn btn-danger" /> <a href="@Url.Action("Index")" class="btn btn-primary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+@if (!string.IsNullOrWhiteSpace(this.Model.Message))
+{
+    <div class="modal hide fade in" id="message-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>@this.Model.Message</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+
+    </script>
+}

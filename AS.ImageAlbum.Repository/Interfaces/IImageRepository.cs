@@ -12,5 +12,6 @@ namespace AS.ImageAlbum.Repository.Interfaces
         Image GetByImageURL(string ImageUrl);
 
         List<Tag> GetActiveTags();
+        void DeleteImage(Guid id);
     }
 }

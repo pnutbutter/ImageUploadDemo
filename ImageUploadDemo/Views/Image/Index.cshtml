@@ -224,7 +224,8 @@
                         var localImageContainer = getImageContainer().clone();
                         localImageContainer.find("img").attr("src", "/Image/Images/" + items[i].ImageUrl);
                         localImageContainer.find("img").attr("alt", items[i].ImageAlt);
-                        localImageContainer.find(".edit-image-button").attr("href", "@Url.Action("Edit")/"+items[i].ImageId)
+                        localImageContainer.find(".edit-image-button").attr("href", "@Url.Action("Edit")/" + items[i].ImageId)
+                        localImageContainer.find(".delete-image-button").attr("href", "@Url.Action("Delete")/"+items[i].ImageId)
                         localImageContainer.find(".image-title").text(items[i].ImageName);
 
                         $("#album").append($(localImageContainer));
