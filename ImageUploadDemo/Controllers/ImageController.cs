@@ -12,6 +12,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
+using AS.ImageAlbum.BusinessLogic.DTO;
 
 namespace AS.ImageAlbum.Website.Controllers
 {
@@ -30,12 +31,17 @@ namespace AS.ImageAlbum.Website.Controllers
             ImageIndex viewModel = new ImageIndex();
             try
             {
-                FindAllServicesQuery query = new FindAllServicesQuery();
-                this.service.FindAll(query);
-                if (query.Response == FindAllServicesQuery.SUCCESS)
+                FindActiveTagsQuery query = new FindActiveTagsQuery();
+                this.service.FindActiveTags(query);
+                if (query.Response == EventMessage.SUCCESS)
                 {
-
-                    viewModel.AlbumImages = query.AlbumImages;
+                    viewModel.TagFilterIds = new Guid[query.Tags.Count];
+                    viewModel.TagFilters = new string[query.Tags.Count];
+                    for (int i = 0; i < query.Tags.Count; i++)
+                    {
+                        viewModel.TagFilterIds[i] = query.Tags[i].TagId;
+                        viewModel.TagFilters[i] = query.Tags[i].Name;
+                    }
                 }
                 else
                 {
@@ -209,6 +215,8 @@ namespace AS.ImageAlbum.Website.Controllers
                 query.BeginIndex = model.BeginIndex;
                 query.EndIndex = model.EndIndex;
                 query.TagFilters = new List<Guid>();
+                if (!string.IsNullOrWhiteSpace(model.Search))
+                    query.Search = model.Search.ToLower();
 
                 if (model.TagFilters != null)
                 {

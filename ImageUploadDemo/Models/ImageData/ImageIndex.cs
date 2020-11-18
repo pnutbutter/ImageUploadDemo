@@ -11,6 +11,5 @@ namespace AS.ImageAlbum.Website.Models.ImageData
         public string Message { get; set; }
         public string[] TagFilters { get; set; }
         public Guid[] TagFilterIds { get; set; }
-        public List<AlbumImage> AlbumImages { get; set; }
     }
 }

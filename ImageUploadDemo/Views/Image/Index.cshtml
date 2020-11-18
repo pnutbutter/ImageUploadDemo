@@ -5,24 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (!string.IsNullOrWhiteSpace(this.Model.Message))
-{
-    <div class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Message</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>@this.Model.Message</p>
-                </div>
-            </div>
-        </div>
-    </div>
-}
 <style>
     .img-block {
         padding-right: 0px;
@@ -54,25 +36,72 @@
         height: auto;
     }
 </style>
-<div id="album" class="row text-center text-lg-left">
-    <div class="col-lg-3 col-md-4 col-6 img-block">
-        <img class="img-fluid image-box" src="test" alt="">
-        <div class="image-overlay">
-            <p class="image-title">
-            </p>
-            <p class="text-center">
-                <a href="#" class="btn btn-primary edit-image-button">Edit</a> <a href="#" class="btn btn-primary delete-image-button">Delete</a>
-            </p>
+<div class="row">
+    <div class="col-md-4 col-lg-2">
+        <div class="row">
+            <div class="col-md-12">
+                <input type="text" id="search" /><button id="search-btn" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <strong>Filters:</strong>
+                </div>
+            </div>
+            @for (int i = 0; i < this.Model.TagFilters.Length; i++)
+            {
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="">@this.Model.TagFilters[i]</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="checkbox" class="filter-input" data-id="@this.Model.TagFilterIds[i]" data-toggle="toggle" data-on="On" data-off="off" data-onstyle="success" data-offstyle="danger">
+                    </div>
+                </div>
+            }
+
+
+        </div>
+    <div class="col-md-8 col-lg-10">
+        <div id="album" class="row text-center text-lg-left">
+            <div class="col-lg-3 col-md-4 col-6 img-block">
+                <img class="img-fluid image-box" src="test" alt="">
+                <div class="image-overlay">
+                    <p class="image-title">
+                    </p>
+                    <p class="text-center">
+                        <a href="#" class="btn btn-primary edit-image-button">Edit</a> <a href="#" class="btn btn-primary delete-image-button">Delete</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-sm-12">
+                <p>
+                    <a href="#" id="load-image-btn" class="btn btn-primary" data-begin="4">Load More Images</a>
+                </p>
+            </div>
         </div>
     </div>
 </div>
-<div class="row text-center">
-    <div class="col-sm-12">
-        <p>
-            <a href="#" id="load-image-btn" class="btn btn-primary" data-begin="4">Load More Images</a>
-        </p>
+@if (!string.IsNullOrWhiteSpace(this.Model.Message))
+{
+    <div class="modal hide fade in" id="message-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>@this.Model.Message</p>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+}
 @section Scripts {
     <script type="text/javascript">
 
@@ -96,21 +125,62 @@
         $(document).ready(function () {
             //initial page load
             LoadImages(0, getLoadAmount(), null);
-            //page loads on load button click
+
+            $(".filter-input").change(function (e) {
+                FilterSearchLoad();
+            })
+
+            $("#search-btn").click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                FilterSearchLoad();
+            })
+
+            $("#search").keypress(function (e) {
+                if (e.keyCode === 13) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    FilterSearchLoad();
+                }
+            })
+
+            //page loads more images on load button click
             $("#load-image-btn").click(function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 var begin = $(this).data("begin");
-                LoadImages(begin, begin + getLoadAmount(), null);
+                LoadImages(begin, begin + getLoadAmount());
                 //update data begin for next button click
                 $(this).data("begin", begin + getLoadAmount());
             })
         })
 
+        FilterSearchLoad = function () {
+            $("#load-image-btn").data("begin", 0);
+            $("#album").html('');
+            var begin = 0;
+            LoadImages(begin, begin + getLoadAmount());
+            //update data begin for next button click
+            $("#load-image-btn").data("begin", begin + getLoadAmount());
+        }
 
-        LoadImages = function (beginIndex, endIndex, tagFilters) {
+
+        LoadImages = function (beginIndex, endIndex) {
 
             var data;
+
+            var tagFilters = new Array();
+            $(".filter-input").each(function () {
+                console.log(this.checked);
+                console.log($(this).data("id"));
+                if (this.checked) {
+                    tagFilters.push($(this).data("id"));
+                }
+            })
+            console.log($(".filter-input").length);
+            console.log(tagFilters);
+
+            var searchString = $('#search').val();;
 
             //pass filters if they exist, unsure if an array JSON parse will map to model binding so formatting directly for now
             if (tagFilters != null && tagFilters.length > 0) {
@@ -127,12 +197,14 @@
                 data = {
                     BeginIndex: beginIndex,
                     EndIndex: endIndex,
-                    TagFilters: filterString
+                    Search: searchString,
+                    TagFilters: tagFilters
                 };
             } else {
                 data = {
                     BeginIndex: beginIndex,
                     EndIndex: endIndex,
+                    Search: searchString
                 }
             }
 
@@ -161,7 +233,14 @@
                 }
             });
         }
-
+        @if (!string.IsNullOrWhiteSpace(this.Model.Message))
+        {
+        <text>
+        $(document).ready(function () {
+            $('#message-modal').modal('show');
+        })
+        </text>
+        }
 
 
     </script>

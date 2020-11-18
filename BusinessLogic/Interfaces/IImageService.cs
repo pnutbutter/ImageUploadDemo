@@ -18,5 +18,7 @@ namespace AS.ImageAlbum.BusinessLogic.Interfaces
 
         void FindByImageUrl(FindByImageUrlQuery query);
 
+        void FindActiveTags(FindActiveTagsQuery query);
+
     }
 }

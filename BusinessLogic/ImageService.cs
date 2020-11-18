@@ -9,6 +9,7 @@ using AS.ImageAlbum.BusinessLogic.DTO.Query;
 using AS.ImageAlbum.Repository.Models;
 using AS.ImageAlbum.BusinessLogic.DTO.Command;
 using AS.ImageAlbum.BusinessLogic.Models;
+using AS.ImageAlbum.BusinessLogic.DTO;
 
 namespace AS.ImageAlbum.BusinessLogic 
 {
@@ -101,7 +102,7 @@ namespace AS.ImageAlbum.BusinessLogic
             query.AlbumImages = new List<AlbumImage>();
             try
             {
-                foreach (Image img in repository.GetFromTo(query.BeginIndex, query.EndIndex, query.TagFilters))
+                foreach (Image img in repository.GetFromTo(query.BeginIndex, query.EndIndex, query.TagFilters, query.Search))
                 {
                     query.AlbumImages.Add(Convert(img));
                 }
@@ -156,6 +157,24 @@ namespace AS.ImageAlbum.BusinessLogic
                 return;
             }
             query.Response = FindAllServicesQuery.SUCCESS;
+        }
+
+        public void FindActiveTags(FindActiveTagsQuery query)
+        {
+            try
+            {
+                query.Tags = new List<AlbumTag>();
+                foreach(Tag tag in repository.GetActiveTags())
+                {
+                    query.Tags.Add(new AlbumTag { Name = tag.Name, TagId = tag.TagId });
+                }
+            }
+            catch (Exception ex)
+            {
+                query.Response = String.Format(EventMessage.ERROR, ex.Message);
+                return;
+            }
+            query.Response = EventMessage.SUCCESS;
         }
     }
 }

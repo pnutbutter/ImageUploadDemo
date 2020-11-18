@@ -235,7 +235,7 @@ namespace AS.ImageAlbum.Repository
             }
         }
 
-        public virtual List<Image> GetFromTo(int start, int end, List<Guid> tagFilters)
+        public virtual List<Image> GetFromTo(int start, int end, List<Guid> tagFilters, string search)
         {
             try
             {
@@ -243,32 +243,70 @@ namespace AS.ImageAlbum.Repository
                 int takeAmount = end - start;
                 if (tagFilters != null && tagFilters.Count > 0)
                 {
-                    imageList = (from i in dbContext.TblImage
-                                 join it in dbContext.TblImageTag on i.ImageId equals it.ImageId
-                                 where tagFilters.Contains(it.TagId)
-                                 select new Image()
-                                 {
-                                     ImageUrl = i.ImageUrl,
-                                     ImageAlt = i.ImageAlt,
-                                     ImageName = i.ImageName,
-                                     ImageId = i.ImageId
-                                 }).Skip(start).Take(takeAmount).ToList();
+                    if (string.IsNullOrWhiteSpace(search))
+                    {
+                        imageList = (from i in dbContext.TblImage
+                                     join it in dbContext.TblImageTag on i.ImageId equals it.ImageId
+                                     where tagFilters.Contains(it.TagId)
+                                     select new Image()
+                                     {
+                                         ImageUrl = i.ImageUrl,
+                                         ImageAlt = i.ImageAlt,
+                                         ImageName = i.ImageName,
+                                         ImageId = i.ImageId
+                                     }).Distinct().OrderBy(image => image.ImageName).Skip(start).Take(takeAmount).ToList();
+                    }
+                    else
+                    {
+                        imageList = (from i in dbContext.TblImage
+                                     join it in dbContext.TblImageTag on i.ImageId equals it.ImageId
+                                     where tagFilters.Contains(it.TagId)
+                                     &&
+                                     (
+                                     i.ImageName.Contains(search.ToLower())
+                                     ||
+                                     i.ImageAlt.Contains(search.ToLower())
+                                     )
+                                     select new Image()
+                                     {
+                                         ImageUrl = i.ImageUrl,
+                                         ImageAlt = i.ImageAlt,
+                                         ImageName = i.ImageName,
+                                         ImageId = i.ImageId
+                                     }).Distinct().OrderBy(image => image.ImageName).Skip(start).Take(takeAmount).ToList();
+                    }
                 }
                 else
                 {
-                    imageList = (from i in dbContext.TblImage
-                                 select new Image()
-                                 {
-                                     ImageUrl = i.ImageUrl,
-                                     ImageAlt = i.ImageAlt,
-                                     ImageName = i.ImageName,
-                                     ImageId = i.ImageId
-                                 }).Skip(start).Take(takeAmount).ToList();
-
-                    //.Skip(start).Take(end - start)
+                    if (string.IsNullOrWhiteSpace(search))
+                    {
+                        imageList = (from i in dbContext.TblImage
+                                     select new Image()
+                                     {
+                                         ImageUrl = i.ImageUrl,
+                                         ImageAlt = i.ImageAlt,
+                                         ImageName = i.ImageName,
+                                         ImageId = i.ImageId
+                                     }).Distinct().OrderBy(image => image.ImageName).Skip(start).Take(takeAmount).ToList();
+                    }
+                    else
+                    {
+                        imageList = (from i in dbContext.TblImage
+                                     where
+                                     (
+                                     i.ImageName.Contains(search.ToLower())
+                                     ||
+                                     i.ImageAlt.Contains(search.ToLower())
+                                     )
+                                     select new Image()
+                                     {
+                                         ImageUrl = i.ImageUrl,
+                                         ImageAlt = i.ImageAlt,
+                                         ImageName = i.ImageName,
+                                         ImageId = i.ImageId
+                                     }).Distinct().OrderBy(image => image.ImageName).Skip(start).Take(takeAmount).ToList();
+                    }
                 }
-
-
                 return imageList;
             }
             catch (Exception ex)
@@ -294,6 +332,26 @@ namespace AS.ImageAlbum.Repository
                 throw ex;
             }
             return img;
+        }
+
+        public List<Tag> GetActiveTags()
+        {
+            List<Tag> tags;
+            try
+            {
+                tags = (from t in dbContext.TblTag
+                        join it in dbContext.TblImageTag on t.TagId equals it.TagId
+                        select new Tag()
+                        {
+                            Name = t.Tag,
+                            TagId = t.TagId
+                        }).Distinct().ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return tags;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace AS.ImageAlbum.BusinessLogic.DTO.Query
     {
         public int BeginIndex { get; set; }
         public int EndIndex { get; set; }
+        public string Search { get; set; }
         public List<Guid> TagFilters { get; set; }
         public List<AlbumImage> AlbumImages { get; set; }
     }

@@ -12,5 +12,6 @@ namespace AS.ImageAlbum.Website.Models.ImageData
         public int BeginIndex { get; set; }
         public int EndIndex { get; set; }
         public string[] TagFilters { get; set; }
+        public string Search { get; set; }
     }
 }
