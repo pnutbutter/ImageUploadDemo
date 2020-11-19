@@ -241,6 +241,9 @@ namespace AS.ImageAlbum.Website.Controllers
             return Json(JsonConvert.SerializeObject(imageList));
         }
 
+
+        //permanant link based on URL text field
+        //optionally could do a route and cut out "/Image/Images/<string url param>" to be "/Image/<string url param>" for a shorter URL
         [HttpGet]
         public ActionResult Images(string id)
         {
