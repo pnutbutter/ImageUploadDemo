@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogic\AS.ImageAlbum.BusinessLogic.csproj" />
+    <ProjectReference Include="..\ImageUploadDemo\AS.ImageAlbum.Website.csproj" />
   </ItemGroup>
 
 </Project>

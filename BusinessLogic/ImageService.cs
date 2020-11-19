@@ -78,7 +78,7 @@ namespace AS.ImageAlbum.BusinessLogic
             command.Response = EventMessage.SUCCESS;
         }
 
-        public void FindFromToTagFilter(FindFromToTagFilterQuery query)
+        public virtual void FindFromToTagFilter(FindFromToTagFilterQuery query)
         {
             query.AlbumImages = new List<AlbumImage>();
             try
