@@ -123,6 +123,9 @@
         }
 
         $(document).ready(function () {
+            //create image container and remove dummy image record from page
+            getImageContainer()
+
             //initial page load
             LoadImages(0, getLoadAmount(), null);
 
