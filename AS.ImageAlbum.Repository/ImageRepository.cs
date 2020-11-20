@@ -79,11 +79,11 @@ namespace AS.ImageAlbum.Repository
             try
             {
                 TblImage tblImage = new TblImage();
-                entity.AlbumImage = tblImage.AlbumImage;
-                entity.ImageAlt = tblImage.ImageAlt;
-                entity.ImageId = tblImage.ImageId;
-                entity.ImageName = tblImage.ImageName;
-                entity.ImageUrl = tblImage.ImageUrl;
+                tblImage.AlbumImage = entity.AlbumImage;
+                tblImage.ImageAlt = entity.ImageAlt;
+                tblImage.ImageId = entity.ImageId;
+                tblImage.ImageName = entity.ImageName;
+                tblImage.ImageUrl = entity.ImageUrl;
                 tblImage.ImageId = Guid.NewGuid();
                 dbContext.TblImage.Add(tblImage);
 
